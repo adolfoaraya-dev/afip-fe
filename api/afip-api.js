@@ -3,8 +3,10 @@ const path = require('path');
 const AfipFileLoader = require('../services/afip-file-loader'); 
 const AfipLoginCmsGenServices = require('../services/afip-cms-gen-services'); 
 const AfipServices = require('../services/afip-services'); 
+const config = require('../config/app-config.json');
 const { log } = require('console');
 const { sign } = require('crypto');
+const xml2js = require('xml2js');
 
 class AfipEngineApi {
     constructor() {
@@ -15,9 +17,9 @@ class AfipEngineApi {
         try {
 
             // ============================================
-            // VERIFICAR SI YA HAY UN TOKEN VÁLIDO
+            // VERIFICAR SI YA HAY UN TOKEN VÁLIDO`^`~
             // ============================================
-            const filePath = path.join(__dirname, '../config', 'afip-login-cms-data.json');
+            const filePath = path.join(__dirname, '../config', `afip-login-cms-data-${config.env}.json`);
             let tokenValido = false;
 
 
@@ -46,7 +48,8 @@ class AfipEngineApi {
                             success: true,
                             message: 'Token válido existente (desde archivo)',
                             fromCache: true,
-                            data: tokenExistente.data
+                            data: tokenExistente.data,
+                            env: config.env.toLocaleUpperCase()
                         };
                     } else {
                         console.log('⚠️ Token expirado - Generando uno nuevo');
@@ -90,6 +93,7 @@ class AfipEngineApi {
                 const respuestaCompleta = {
                     success: true,
                     message: 'Login exitoso',
+                    env: config.env.toLocaleUpperCase(),
                     timestamp: new Date().toISOString(),
                     fromCache: false,
                     data: {
@@ -110,7 +114,7 @@ class AfipEngineApi {
                 };
 
                 // Definir ruta del archivo
-                const filePath = path.join(__dirname, '../config', 'afip-login-cms-data.json');
+                const filePath = path.join(__dirname, '../config', `afip-login-cms-data-${config.env}.json`);
 
                 // Guardar archivo
                 await fs.writeFile(
@@ -129,6 +133,7 @@ class AfipEngineApi {
                     success: false,
                     message: 'Error al obtener ticket',
                     details: ticketResult.error,
+                    env: config.env.toLocaleUpperCase(),
                     cmsGenerado: {
                         preview: cmsResult.preview,
                         tra: cmsResult.traXml
@@ -164,7 +169,7 @@ class AfipEngineApi {
 
             });
 
-
+            console.log('ultimoComprobanteAutorizado', result)
             return result;
 
 
@@ -185,6 +190,7 @@ class AfipEngineApi {
             const afip = new AfipServices();
 
             const params = {
+                metadata: req.body.metadata, 
                 token: auth.data.ticket.token,
                 sign: auth.data.ticket.sign,
                 cuit: req.body.cuit,  
@@ -203,6 +209,7 @@ class AfipEngineApi {
                 impNeto: req.body.impNeto,    
                 condicionIVAReceptorId: req.body.condicionIVAReceptorId,    
                 obsMsg: req.body.obsMsg,    
+                obsCode: req.body.obsCode,    
             };
 
             // Obtener ticket con el CMS generado
@@ -210,6 +217,35 @@ class AfipEngineApi {
 
 
             return result;
+
+
+        } catch (error) {
+            console.error('❌ Error:', error);
+            return {
+                success: false,
+                message: error.message
+            };
+        }
+    }
+
+     async obtenerFactura (req) {
+
+        console.log('obtenerFactura',req.body)
+            
+       try {
+            const afip = new AfipServices();
+
+            const params = {
+                filename: req.body.filename
+            }
+
+            var jsonData = await afip.obtenerFactura(params)
+
+
+                return {
+                    success: true,
+                    data: jsonData
+                };
 
 
         } catch (error) {
@@ -276,6 +312,32 @@ class AfipEngineApi {
         }
     }
 
+
+    async generarQr (req) {
+
+        console.log('consultarCUIT',req.body)
+            
+       try {
+
+            const afip = new AfipServices();
+
+            // Obtener ticket con el CMS generado
+            const result = await afip.generarQr({
+                qrUrl: req.body.qrUrl
+            });
+
+
+            return result;
+
+
+        } catch (error) {
+            console.error('❌ Error:', error);
+            return {
+                success: false,
+                message: error.message
+            };
+        }
+    }
 
 }
 

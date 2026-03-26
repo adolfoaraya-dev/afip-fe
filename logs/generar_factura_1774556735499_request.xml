@@ -4,8 +4,8 @@
                 <soapenv:Body>
                     <ar:FECAESolicitar>
                         <ar:Auth>
-                            <ar:Token>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iMTM2MjcyMzU3OSIgZ2VuX3RpbWU9IjE3NzQ1MjMxNzkiIGV4cF90aW1lPSIxNzc0NTY2NDM5Ii8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjAzMTIzNTQ4NDYsIENOPWFkb2xmb2FyYXlhcWEiIGF1dGhtZXRob2Q9ImNtcyIgcmVnbWV0aG9kPSIyMiI+CiAgICAgICAgICAgIDxyZWxhdGlvbnM+CiAgICAgICAgICAgICAgICA8cmVsYXRpb24ga2V5PSIyMDMxMjM1NDg0NiIgcmVsdHlwZT0iNCIvPgogICAgICAgICAgICA8L3JlbGF0aW9ucz4KICAgICAgICA8L2xvZ2luPgogICAgPC9vcGVyYXRpb24+Cjwvc3NvPgo=</ar:Token>
-                            <ar:Sign>qdgBpk5wvQe6ZRnS0vZzhJb1kTqlU1E+YlqglP68lbEymCLRJ2J7+2QPOoj8CiqrVMB/z1KrYKJuCRhgqsI/H1ykQCYpdAnGBtheY8HrN9ma67RH58Rv7RUZeHzx16Qhh1Vj8mbewPimrwNCMM6OLtQL56U3P8F5Pkc4Gh9eOyM=</ar:Sign>
+                            <ar:Token>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhLCBPPUFGSVAsIEM9QVIsIFNFUklBTE5VTUJFUj1DVUlUIDMzNjkzNDUwMjM5IiBkc3Q9IkNOPXdzZmUsIE89QUZJUCwgQz1BUiIgdW5pcXVlX2lkPSI3NjM2NTgxMTkiIGdlbl90aW1lPSIxNzc0NTU0MjI5IiBleHBfdGltZT0iMTc3NDU5NzQ4OSIvPgogICAgPG9wZXJhdGlvbiB0eXBlPSJsb2dpbiIgdmFsdWU9ImdyYW50ZWQiPgogICAgICAgIDxsb2dpbiBlbnRpdHk9IjMzNjkzNDUwMjM5IiBzZXJ2aWNlPSJ3c2ZlIiB1aWQ9IlNFUklBTE5VTUJFUj1DVUlUIDIwMzEyMzU0ODQ2LCBDTj1hZG9sZm9hcmF5YSIgYXV0aG1ldGhvZD0iY21zIiByZWdtZXRob2Q9IjIyIj4KICAgICAgICAgICAgPHJlbGF0aW9ucz4KICAgICAgICAgICAgICAgIDxyZWxhdGlvbiBrZXk9IjIwMzEyMzU0ODQ2IiByZWx0eXBlPSI0Ii8+CiAgICAgICAgICAgIDwvcmVsYXRpb25zPgogICAgICAgIDwvbG9naW4+CiAgICA8L29wZXJhdGlvbj4KPC9zc28+Cg==</ar:Token>
+                            <ar:Sign>bSsMQ4UWoimR7hfXfAdP9hWnLn5yWDNRsKrOpW5vPmIv7bEQE5tk+mTEHkrzA9usrFqSgEmdduwvE9pFQqNlfcdnvFhDDH7UxkcbM+VRlgEyZfJe1KvcdSDD7H1yt7qyqgdCu0ROWPEpZoW0DjM2cHcKp9uPzASYvpHeD/prcG4=</ar:Sign>
                             <ar:Cuit>20312354846</ar:Cuit>
                         </ar:Auth>
                         <ar:FeCAEReq>
@@ -20,15 +20,15 @@
                                 <ar:Concepto>3</ar:Concepto>
                                 <ar:DocTipo>80</ar:DocTipo>
                                 <ar:DocNro>30707617078</ar:DocNro>
-                                <ar:CbteDesde>18</ar:CbteDesde>
-                                <ar:CbteHasta>18</ar:CbteHasta>
-                                <ar:CbteFch>20260316</ar:CbteFch>
-                                <ar:FchServDesde>20260301</ar:FchServDesde>
-                                <ar:FchServHasta>20260331</ar:FchServHasta>
-                                <ar:FchVtoPago>20260410</ar:FchVtoPago>
-                                <ar:ImpTotal>1115000</ar:ImpTotal>
+                                <ar:CbteDesde>3</ar:CbteDesde>
+                                <ar:CbteHasta>3</ar:CbteHasta>
+                                <ar:CbteFch>20260326</ar:CbteFch>
+                                <ar:FchServDesde>20260201</ar:FchServDesde>
+                                <ar:FchServHasta>20260228</ar:FchServHasta>
+                                <ar:FchVtoPago>20260331</ar:FchVtoPago>
+                                <ar:ImpTotal>2727500</ar:ImpTotal>
                                 <ar:ImpTotConc>0</ar:ImpTotConc>
-                                <ar:ImpNeto>1115000</ar:ImpNeto>
+                                <ar:ImpNeto>2727500</ar:ImpNeto>
                                 <ar:ImpOpEx>0</ar:ImpOpEx>
                                 <ar:ImpIVA>0</ar:ImpIVA>
                                 <ar:ImpTrib>0</ar:ImpTrib>
@@ -36,8 +36,8 @@
                                 <ar:MonCotiz>1</ar:MonCotiz>
                                 <ar:Observaciones>
                                     <ar:Obs>
-                                        <ar:Code>0</ar:Code>
-                                        <ar:Msg>Honorarios correspondientes al mes de marzo</ar:Msg>
+                                        <ar:Code>002</ar:Code>
+                                        <ar:Msg>Servicios IT - Desarrollo</ar:Msg>
                                     </ar:Obs>
                                 </ar:Observaciones>
                             </ar:FECAEDetRequest>

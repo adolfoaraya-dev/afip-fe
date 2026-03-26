@@ -12,6 +12,8 @@ class HomeController {
             this.configurarEventos();
 
             var afiptoken = await  this.cargarAfipToken();
+            $('#env').html(`[${afiptoken.env}]`);
+                
 
             // Cargar datos del servidor
             const [condicionIvaReceptor, utimoComprobanteAutorizado] = await Promise.all([
@@ -22,10 +24,16 @@ class HomeController {
 
             this.mostrarSesion(afiptoken);
             this.mostrarUltimoComprobanteAutorizado(utimoComprobanteAutorizado);
-            this.mostrarCondicionIvaReceptor(condicionIvaReceptor);
-            
+            this.mostrarCondicionIvaReceptor(condicionIvaReceptor);            
 
+
+            $('#cbteFch').val(new Date().toISOString().slice(0, 10));
            
+         
+
+   
+            const ultimoDia = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+            $('#fchVtoPago').val(ultimoDia.toISOString().slice(0, 10));
 
         } catch (error) {
             console.error('Error al cargar datos:', error);
@@ -112,6 +120,16 @@ class HomeController {
         document.getElementById('btGenerarFactura').addEventListener('click', () => {
             this.generarFactura();
         });
+
+
+        document.getElementById('btnVerFactura').addEventListener('click', () => {
+            
+                let nombreArchivo = $('#txtFacturaArchivo').val();
+                const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}`;
+                  window.open(url, '_blank');
+        });
+
+        
     }
 
     async generarFactura(){
@@ -133,8 +151,17 @@ class HomeController {
                                 });
 
             const data = await response.json();
+            this.homeView.consultarcuit=data.data;
 
             Swal.close();           
+
+            const domicilioCompleto = [
+                   data. data.domicilio?.direccion,
+                    data.data.domicilio?.localidad,
+                    data.data.domicilio?.provincia
+                    ].filter(Boolean).join(" ");
+
+            this.homeView.consultarcuit.domicilioCompleto = domicilioCompleto;
 
             const result = await Swal.fire({
                 icon: 'success',
@@ -143,7 +170,8 @@ class HomeController {
                     <div style="text-align: left">
                         <p><strong>Razón Social:</strong> ${data.data.razonSocial}</p>
                         <p><strong>CUIT:</strong> ${data.data.cuit}</p>
-                        <p><strong>Detalle:</strong> ${data.data.detalle}</p>
+                        <p><strong>Actividad Principal:</strong> ${data.data.actividadPrincipal}</p>
+                         <p><strong>Domicilio:</strong> ${domicilioCompleto}</p>
                     </div>
                 `,
                 showCancelButton: true,
@@ -152,10 +180,10 @@ class HomeController {
             });
             
 
-            if(data.data.detalle.find(d=> d.includes('Exento') == true) != null &&  !$('#condicionIVAReceptorId option:selected').text().includes('Exento') )
+            if(data.data.condicionIVA.toLowerCase().includes('exento') == true  &&  !$('#condicionIVAReceptorId option:selected').text().includes('Exento') )
                 return this.mostrarAlert( `Condicion IVA Receptor no coincide `,true);
 
-            if(data.data.detalle.find(d=> d.includes('Inscripto') == true) != null &&  !$('#condicionIVAReceptorId option:selected').text().includes('Inscripto') )
+            if(data.data.condicionIVA.toLowerCase().includes('inscripto') == true &&  !$('#condicionIVAReceptorId option:selected').text().includes('Inscripto') )
                 return this.mostrarAlert( `Condicion IVA Receptor no coincide`,true);
 
 
@@ -177,8 +205,14 @@ class HomeController {
 
         try {
             
+            //dateStr.replace(/-/g, '');
 
             const params = {
+                
+                metadata: {
+                    consultarcuit: this.homeView.consultarcuit,
+                    condicionIVAReceptor: $('#condicionIVAReceptorId option:selected').text()
+                },
                 cuit: "20312354846",
                 ptoVta: this.homeView.ptoVta,        
                 cbteTipo: this.homeView.cbteTipo,    
@@ -187,14 +221,16 @@ class HomeController {
                 docNro: $('#docNro').val(),
                 cbteDesde: $('#cbteDesde').val(),
                 cbteHasta: $('#cbteHasta').val(),
-                cbteFch: $('#cbteFch').val(),
-                fchServDesde: $('#fchServDesde').val(),
-                fchServHasta: $('#fchServHasta').val(),
-                fchVtoPago: $('#fchVtoPago').val(),
+                cbteFch: $('#cbteFch').val().replace(/-/g, ''),
+                fchServDesde: $('#fchServDesde').val().replace(/-/g, ''),
+                fchServHasta: $('#fchServHasta').val().replace(/-/g, ''),
+                fchVtoPago: $('#fchVtoPago').val().replace(/-/g, ''),
                 impTotal: $('#impTotal').val(),
                 impNeto: $('#impNeto').val(),
                 condicionIVAReceptorId: $('#condicionIVAReceptorId').val(),
-                obsMsg: "Honorarios correspondientes al mes de marzo"
+                obsMsg: $('#obsMsg').val() ,
+                obsCode: $('#obsCode').val() 
+                
             }
 
             const response =  await fetch('/api/afip/generar-factura', {
@@ -209,10 +245,14 @@ class HomeController {
             
             const data = await response.json();
 
+           
+
             Swal.close();        
 
-            if(data.success == true)
+            if(data.success == true){
                 this.mostrarAlert('Factura Generada!')
+                $('#txtFacturaArchivo').val( data.data.filetag);
+            }
             else
                 this.mostrarAlert( `ERROR ${data.errors[0].message}`,true);
         

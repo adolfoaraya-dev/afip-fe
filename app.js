@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 const AfipFileLoader = require('./services/afip-file-loader');
 const AfipLoginCmsGenServices = require('./services/afip-cms-gen-services');
 const AfipServices = require('./services/afip-services');
-const AfipEngineApi = require('./api/afip-login-api');
+const AfipEngineApi = require('./api/afip-api');
 
 // Servir archivos estáticos
 app.use(express.static(path.join(__dirname)));
@@ -76,6 +76,19 @@ app.post('/api/afip/consultar-cuit', async (req, res) => {
 
 })
 
+app.post('/api/afip/generar-qr', async (req, res) => {
+    const afipEngineApi = new AfipEngineApi();
+
+    let result =  await afipEngineApi.generarQr(req);
+
+    if(result.success === true){
+        res.json(result);
+    }else{
+         res.status(500).json(result);
+    }
+
+})
+
 
 
 app.post('/api/afip/generar-factura', async (req, res) => {
@@ -91,6 +104,18 @@ app.post('/api/afip/generar-factura', async (req, res) => {
 
 })
 
+app.post('/api/afip/obtener-factura', async (req, res) => {
+    const afipEngineApi = new AfipEngineApi();
+
+    let result =  await afipEngineApi.obtenerFactura(req);
+
+    if(result.success === true){
+        res.json(result);
+    }else{
+         res.status(500).json(result);
+    }
+
+})
 
 
 // Ruta principal - sirve home.html
