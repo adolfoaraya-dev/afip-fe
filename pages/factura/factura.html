@@ -1,0 +1,1254 @@
+<html>
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+</head>
+
+<body>
+    <style type="text/css">
+        .ritz {
+            max-width: 210mm;
+            margin: 0;
+        }
+
+        .waffle {
+            width: 100%;
+            table-layout: auto;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000000;
+            background-color: #ffffff;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        /* copiar a print desde aca */
+
+        .waffle th,
+        .waffle td {
+            max-width: 90px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+
+        .waffle th[style],
+        .waffle td[style] {
+            width: auto !important;
+        }
+
+        .waffle col {
+            width: 100px !important;
+        }
+
+        .br-1 {
+            border-right: 1px solid #000000;
+        }
+
+        .bl-2 {
+            border-left: 2px solid #000000;
+        }
+
+        .bt-2 {
+            border-top: 2px solid #000000;
+        }
+
+        .bb-2 {
+            border-bottom: 2px solid #000000;
+        }
+
+        .br-2 {
+            border-right: 2px solid #000000;
+        }
+
+
+        /*---------------------*/
+
+        .ritz .waffle a {
+            color: inherit;
+        }
+
+        .ritz .waffle .s14 {
+            border-right: 1px SOLID #000000;
+            
+
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s20 {
+
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            
+
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s5 {
+            
+            font-weight: bold;
+            font-size: 32px;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s21 {
+            border-bottom: 1px SOLID #000000;
+            
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+
+        .ritz .waffle .s32 {
+            border-right: 1px SOLID #000000;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+
+        .ritz .waffle .s32b {
+            border-top: 2px SOLID #000000;
+            border-right: 2px SOLID #000000;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s8 {
+            border-bottom: 0px SOLID #ffffff;            
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s2 {
+            border-bottom: 0px SOLID #ffffff;
+            border-right: 1px SOLID #000000;            
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s2b {
+            border-bottom: 0px SOLID #ffffff;
+            border-right: 0px SOLID #000000;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s10 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 5px;
+        }
+
+        .ritz .waffle .s11 {
+
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s22 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 0px SOLID #ffffff;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s24 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #b7b7b7;            
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s35 {
+            border-bottom: 1px SOLID #000000;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s13 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s25 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #b7b7b7;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s39 {
+            text-align: center;
+            font-weight: bold;
+            color: #434343;
+            font-family: docs-Montserrat, Arial;
+            font-size: 27pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s6 {
+            border-right: none;            
+            font-weight: bold;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 5px;
+        }
+
+        .ritz .waffle .s19 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;     
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s31 {            
+            font-weight: bold;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s41 {
+            border-right: none;            
+            font-weight: bold;
+            font-style: italic;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s27 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #b7b7b7;      
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s4 {
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s40 {
+            border-right: none;
+            text-align: center;
+            font-size: 5pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s16 {
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s33 {
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s0 {
+            border-right: 0px SOLID #ffffff;  
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s26 {
+            border-bottom: 1px SOLID #000000;
+            background-color: #b7b7b7;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s28 {
+            text-align: right;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s7 {
+            border-right: none;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s29 {
+            text-align: right;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s17 {
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s36 {
+            border-bottom: 1px SOLID #666666;
+            border-right: 0px SOLID #ffffff;     
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s18 {
+            border-right: none;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s3 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 28px;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s37 {
+            border-bottom: 0px SOLID #ffffff;
+            border-right: 1px SOLID #666666;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s34 {
+            border-right: none;
+            border-bottom: 2px SOLID #000000;            
+            font-weight: bold;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s1 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 0px SOLID #ffffff;  
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+            width: 50px;
+        }
+
+        .ritz .waffle .s1b {
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+            width: 50px;
+        }
+
+        .ritz .waffle .s15 {
+            border-right: none;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 5px;
+        }
+
+        .ritz .waffle .s23 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s38 {
+            border-bottom: 1px SOLID #666666;
+            border-right: 1px SOLID #666666;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s9 {
+            border-right: none;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 5px;
+        }
+
+        .ritz .waffle .s12 {
+            border-bottom: 1px SOLID #000000;       
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s12b {
+            border-bottom: 2px SOLID #000000; 
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+    </style>
+    <div class="ritz grid-container" dir="ltr">
+        <table cellpadding="0" cellspacing="0" class="waffle">
+            <tbody>
+                <tr style="height: 22px">
+                    <td class="s0"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 50px">
+                    <td class="s2"></td>
+                    <td class="s3" colspan="12" dir="ltr">
+                        <span style="margin-left: -38px;">ORIGINAL</span>
+                    </td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2b"></td>
+                    <td class="s4" colspan="2" dir="ltr">
+                        <div
+                            style="border: 1px solid;margin-top: -3px;margin-bottom: -2px;margin-left: 46px;margin-right: 46px;height: 76px;">
+                            <span style="font-size: 40px; font-weight: bold">C</span>
+                            <br>
+                            <span style="font-weight: bold">COD. 011</span>
+                        </div>
+
+                    </td>
+
+                    <td class="s5" colspan="2" dir="ltr">FACTURA</td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+
+                    <td class="s6 softmerge" dir="ltr">
+                        <span class="softmerge-inner">
+                            Punto de Venta: 01002
+                        </span>
+                        <span class="softmerge-inner" style="margin-left: 45px;">
+                            Comp. Nro: 00000002
+                        </span>
+
+                    </td>
+                    <td class="s0"></td>
+                    <td class="s7"></td>
+                    <td class="s8" dir="ltr"></td>
+                    <td class="s8 br-1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+
+                    <td class="s6 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">Fecha de Emisión: 16/03/2026</div>
+                    </td>
+                    <td class="s0" dir="ltr"></td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8 br-1" dir="ltr"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s6 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            Razón Social:<span style="font-weight: normal"> ARAYA ADOLFO ALEJANDRO </span>
+                        </div>
+                    </td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0" dir="ltr"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">
+                            <span style="font-weight: bold">CUIT: </span>20312354846
+                        </div>
+                    </td>
+                    <td class="s0"></td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 438px; left: -1px">
+                            <span style="font-weight: bold">Domicilio Comercial: </span>456 1565 - Juan M. Gutierrez,
+                            Buenos
+                            Aires
+                        </div>
+                    </td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8 br-1"></td>
+                    <td class="s0"></td>
+
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Ingresos Brutos:</span> 20312354846
+                        </div>
+                    </td>
+                    <td class="s0" dir="ltr"></td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8 br-1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s2"></td>
+                    <td class="s0"></td>
+
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Fecha de Inicio de Actividades:</span> 03/12/2018
+                        </div>
+                    </td>
+                    <td class="s0" dir="ltr"></td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8 br-1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s10 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 398px; left: -1px">
+                            <span style="font-weight: bold">Condición frente al IVA: </span>Responsable Monotributo
+                        </div>
+                    </td>
+                    <td class="s11"></td>
+                    <td class="s11"></td>
+                    <td class="s12"></td>
+                    <td class="s12"></td>
+                    <td class="s13"></td>
+                    <td class="s1"></td>
+                    <td class="s1" dir="ltr"></td>
+                    <td class="s1" dir="ltr"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s13"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 1px">
+                    <td class="s0"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s2"></td>
+                    <td class="s10 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Periodo Facturado Desde:</span> 01/03/2026
+                        </div>
+                    </td>
+                    <td class="s11"></td>
+                    <td class="s12"></td>
+                    <td class="s12"></td>
+                    <td class="s12"></td>
+                    <td class="s11 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 138px; left: -1px">
+                            <span style="font-weight: bold">Hasta:</span> 31/03/2026
+                        </div>
+                    </td>
+
+
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+
+                    <td class="s10 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Fecha de Vto. para el pago: </span>10/04/2026
+                        </div>
+                    </td>
+                    <td class="s1"></td>
+                    <td class="s11"></td>
+                    <td class="s12 br-1"></td>
+                    <td class="s8"></td>
+                </tr>
+                <tr style="height: 1px">
+                    <td class="s0"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 32px">
+                    <td class="s14"></td>
+                    <td class="s15 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">
+                            <span style="font-weight: bold">CUIT: </span>33999000709
+                        </div>
+                    </td>
+                    <td class="s16"></td>
+                    <td class="s16"></td>
+                    <td class="s17"></td>
+                    <td class="s15 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 458px; left: -1px">
+                            <span style="font-weight: bold">Apellido y Nombre / Razón Social: </span>MUNICIPALIDAD DE
+                            SAN
+                            ISIDRO
+                        </div>
+                    </td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s16"></td>
+                    <td class="s16 br-1"></td>
+                    <td class="s17"></td>
+                </tr>
+                <tr style="height: 32px">
+                    <td class="s14"></td>
+                    <td class="s15 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Condición frente al IVA: </span>IVA Sujeto Exento
+                        </div>
+                    </td>
+                    <td class="s18"></td>
+                    <td class="s16"></td>
+                    <td class="s16"></td>
+                    <td class="s17"></td>
+                    <td class="s17"></td>
+                    <td class="s15 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 378px; left: -1px">
+                            <span style="font-weight: bold">Domicilio: </span>Av. Centenario 77 Piso:1 Dpto:CDOR. - San
+                            Isidro,
+                        </div>
+                    </td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s18"></td>
+                    <td class="s16"></td>
+                    <td class="s16 br-1"></td>
+                    <td class="s17"></td>
+                </tr>
+                <tr style="height: 32px">
+                    <td class="s14"></td>
+                    <td class="s19 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Condición de venta:</span> Transferencia Bancaria
+                        </div>
+                    </td>
+                    <td class="s20"></td>
+                    <td class="s21"></td>
+                    <td class="s21"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s22"></td>
+                    <td class="s23"></td>
+                    <td class="s17"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s1"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px; font-weight: bold;">
+                    <td class="s2"></td>
+                    <td class="s24" dir="ltr">Código</td>
+                    <td class="s25 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">Producto / Servicio</div>
+                    </td>
+                    <td class="s26 "></td>
+                    <td class="s26" dir="ltr"></td>
+                    <td class="s26 br-1" dir="ltr"></td>
+                    <td class="s26 br-1" dir="ltr">Cantidad</td>
+                    <td class="s25 softmerge br-1" dir="ltr">
+                        <div class="softmerge-inner" style="width: 78px; left: -1px">U. Medida</div>
+                    </td>
+                    <td class="s27 softmerge br-1" dir="ltr">
+                        <div class="softmerge-inner" style="width: 138px; left: -1px">Precio Unit.</div>
+                    </td>
+                    <td class="s26" dir="ltr"></td>
+                    <td class="s26 br-1" dir="ltr">% Bonif</td>
+                    <td class="s24" dir="ltr">Imp. Bonif.</td>
+                    <td class="s24" dir="ltr">Subtotal</td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s17"></td>
+                    <td class="s15 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">
+                            Honorarios correspondientes al <br />mes de marzo
+                        </div>
+                    </td>
+                    <td class="s16"></td>
+                    <td class="s17"></td>
+                    <td class="s28" dir="ltr"></td>
+
+                    <td class="s17">1</td>
+                    <td class="s17" dir="ltr">unidad</td>
+                    <td class="s29" colspan="2" dir="ltr">1115000,00</td>
+                    <td class="s29" dir="ltr">0,00</td>
+                    <td class="s29" dir="ltr">0,00</td>
+                    <td class="s29" dir="ltr">1115000,00</td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 220px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s30"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 138px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+
+
+                <tr style="height: 60px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+
+
+                <tr style="height: 63px">
+                    <td class="s2"></td>
+                    <td class="s0 bl-2 bt-2">
+                    </td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s0 bt-2"></td>
+                    <td class="s31 bt-2" dir="ltr">Subtotal: $</td>
+                    <td class="s0 bt-2" dir="ltr"></td>
+                    <td class="s32b" dir="ltr"><b>1115000,00</b></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 41px">
+                    <td class="s2"></td>
+                    <td class="s0 bl-2"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s6 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">Importe Otros Tributos: $</div>
+                    </td>
+                    <td class="s8" dir="ltr"></td>
+                    <td class="s33 br-2" dir="ltr"><b>0,00</b></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 41px">
+                    <td class="s2"></td>
+                    <td class="s1b bl-2 bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s1b bb-2"></td>
+                    <td class="s34 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">Importe Total: $</div>
+                    </td>
+                    <td class="s12b" dir="ltr"></td>
+                    <td class="s35 br-2" dir="ltr" style="border-bottom: 2px solid #000000 !important;">
+                        <b>1115000,00</b>
+                    </td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s36"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td class="s37"></td>
+                    <td class="s38" colspan="12" dir="ltr">"Development IT"</td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 39px">
+                    <td class="s0"></td>
+                    <td class="s0" colspan="2" rowspan="6">
+                        <img style="height: 145px;" src="" />
+
+                    </td>
+                    <td class="s39" dir="ltr" style="font-family: 'Montserrat', sans-serif !important;">ARCA</td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0" style="vertical-align: top;font-size: 17px;font-weight: bold;">
+                        Pág. 1/1
+                    </td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px"><b>CAE N°:</b> 86117884542065
+                        </div>
+                    </td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s40 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 105px;">
+                            AGENCIA DE RECAUDACIÓN<br />
+                            Y CONTROL ADUANERO
+                        </div>
+                    </td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s9 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 298px; left: -1px">
+                            <span style="font-weight: bold">Fecha de Vto. de CAE:</span> 26/03/2026
+                        </div>
+                    </td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s30"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s30"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s41 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 198px; left: -1px">Comprobante Autorizado</div>
+                    </td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s6 softmerge" dir="ltr">
+                        <div class="softmerge-inner" style="width: 658px; left: -1px">
+                            Esta Agencia no se responsabiliza por los datos ingresados en el detalle de la operación
+                        </div>
+                    </td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s7"></td>
+                    <td class="s8"></td>
+                    <td class="s8"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+                <tr style="height: 20px">
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                    <td class="s0"></td>
+                </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+
+</body>
+<style>
+    @media print {
+        @page {
+            margin: 4mm;
+            /* 4mm en todos los lados */
+            size: auto;
+            /* o puedes forzar tamaño: A4 portrait */
+        }
+
+        /* ===== TODOS LOS ESTILOS AHORA DENTRO DE @media print ===== */
+        body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            margin: 0;
+            /* Elimina márgenes del body */
+            padding: 0;
+        }
+
+        .ritz {
+            max-width: none;
+            /* Elimina el ancho máximo */
+            margin: 0;
+            /* Elimina el margen centrado */
+            width: 100%;
+            /* Ocupa todo el ancho */
+        }
+
+        .waffle {
+            width: 100%;
+            table-layout: auto;
+            border-collapse: collapse;
+        }
+
+        /*FIn*/
+
+
+    }
+</style>
+ <script src="/pages/factura/factura.js"></script>
+</html>

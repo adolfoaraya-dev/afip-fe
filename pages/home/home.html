@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFIP - Facturación Electrónica</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #usuario-info {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        #productos-lista {
+            list-style: none;
+            padding: 0;
+        }
+        #productos-lista li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cargando {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AFIP - Facturación Electrónica</h1>
+        
+        <section id="session">
+            <h2>Información de Sesión</h2>
+            <div id="session-info" class="cargando">Cargando sesión...</div>
+        </section>
+
+         <section id="comprobante">
+            <h2>Información de Comprobante</h2>
+            <div id="comprobante-info" class="cargando">Cargando comprobante...</div>
+        </section>       
+                
+        <!-- Tarjeta de Facturación -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                    Generar Factura Electrónica
+                </h5>
+            </div>
+            
+            <div class="card-body">
+                <!-- Datos del Comprobante -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary">
+                    <i class="bi bi-info-circle me-2"></i>Datos del Comprobante
+                </h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="concepto" class="form-label fw-semibold">Concepto</label>
+                            <select class="form-select" id="concepto">
+                                <option value="1">📦 Productos</option>
+                                <option value="2">🛠️ Servicios</option>
+                                <option value="3" selected>📦+🛠️ Productos y Servicios</option>
+                            </select>
+                            <div class="form-text">Tipo de operación</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="condicionIVAReceptorId" class="form-label fw-semibold">Condición IVA del Receptor</label>
+                            <select class="form-select" id="condicionIVAReceptorId">
+                                <option value="1">IVA Responsable Inscripto</option>
+                                <option value="2">IVA Responsable no Inscripto</option>
+                                <option value="3">IVA no Responsable</option>
+                                <option value="4" selected>Sujeto Exento</option>
+                                <option value="5">Consumidor Final</option>
+                                <option value="6">Responsable Monotributo</option>
+                                <option value="7">Sujeto no Categorizado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documento del Receptor -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">
+                    <i class="bi bi-person-badge me-2"></i>Documento del Receptor
+                </h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="docTipo" class="form-label fw-semibold">Tipo de Documento</label>
+                            <select class="form-select" id="docTipo">
+                                <option value="80" selected>🔖 CUIT</option>
+                                <option value="96">🆔 DNI</option>
+                                <option value="99">📄 Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="docNro" class="form-label fw-semibold">Número de Documento</label>
+                            <input type="text" class="form-control" id="docNro" value="33999000709" placeholder="Ingrese CUIT/DNI">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Numeración -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">
+                    <i class="bi bi-123 me-2"></i>Numeración del Comprobante
+                </h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="cbteDesde" class="form-label fw-semibold">Número Desde</label>
+                            <input type="number" class="form-control" id="cbteDesde" value="4" min="1">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="cbteHasta" class="form-label fw-semibold">Número Hasta</label>
+                            <input type="number" class="form-control" id="cbteHasta" value="4" min="1">
+                            <div class="form-text">Normalmente igual al número desde</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fechas -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">
+                    <i class="bi bi-calendar me-2"></i>Fechas
+                </h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="cbteFch" class="form-label fw-semibold">Comprobante</label>
+                            <input type="text" class="form-control" id="cbteFch" value="20260316" placeholder="AAAAMMDD">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="fchServDesde" class="form-label fw-semibold">Servicio Desde</label>
+                            <input type="text" class="form-control" id="fchServDesde" value="20260301" placeholder="AAAAMMDD">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="fchServHasta" class="form-label fw-semibold">Servicio Hasta</label>
+                            <input type="text" class="form-control" id="fchServHasta" value="20260331" placeholder="AAAAMMDD">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="fchVtoPago" class="form-label fw-semibold">Vto. Pago</label>
+                            <input type="text" class="form-control" id="fchVtoPago" value="20260410" placeholder="AAAAMMDD">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Importes -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">
+                    <i class="bi bi-cash-coin me-2"></i>Importes
+                </h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="impTotal" class="form-label fw-semibold">💰 Total</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="impTotal" value="1115000" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="impNeto" class="form-label fw-semibold">📊 Neto</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="impNeto" value="1115000" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="impIVA" class="form-label fw-semibold">🧾 IVA</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="impIVA" value="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="impTotConc" class="form-label fw-semibold">🚫 No Gravado</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="impTotConc" value="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">
+                    <i class="bi bi-chat-text me-2"></i>Observaciones
+                </h6>
+                
+                <div class="mb-4">
+                    <textarea class="form-control" id="obsMsg" rows="3" placeholder="Ingrese observaciones...">Honorarios correspondientes al mes de marzo</textarea>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-flex gap-2 mt-4">
+                    <button type="button" id="btGenerarFactura" class="btn btn-primary px-4" id="generar-factura-btn">
+                        <i class="bi bi-send me-2"></i>Generar Factura
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary px-4" id="limpiar-btn">
+                        <i class="bi bi-eraser me-2"></i>Limpiar
+                    </button>
+                </div>
+
+                <!-- Resultado -->
+                <div id="resultado-factura" class="mt-4" style="display: none;"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Tu JavaScript -->
+    <script src="/pages/home/home.js"></script>
+</body>
+</html>

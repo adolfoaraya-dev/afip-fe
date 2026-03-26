@@ -1,0 +1,17 @@
+{
+    "env": "qa",
+    "setting": {
+        "prod": {
+            "privateKey": "afip_private_key.txt",
+            "certificatePem": "afip_certificate_pem.txt",
+            "url": "https://servicios1.afip.gov.ar/wsfev1/service.asmx",
+            "urlLogin": "https://wsaa.afip.gov.ar/ws/services/LoginCms"
+        },
+        "qa": {
+            "privateKey": "afip_private_key_qa.txt",
+            "certificatePem": "afip_certificate_pem_qa.txt",
+            "url": "https://wswhomo.afip.gov.ar/wsfev1/service.asmx",
+            "urlLogin": "https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
+        }
+    }
+}
