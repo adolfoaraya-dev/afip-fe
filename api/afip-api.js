@@ -1,12 +1,9 @@
 const fs = require('fs').promises;
 const path = require('path'); 
-const AfipFileLoader = require('../services/afip-file-loader'); 
 const AfipLoginCmsGenServices = require('../services/afip-cms-gen-services'); 
 const AfipServices = require('../services/afip-services'); 
 const config = require('../config/app-config.json');
-const { log } = require('console');
-const { sign } = require('crypto');
-const xml2js = require('xml2js');
+
 
 class AfipEngineApi {
     constructor() {
@@ -236,7 +233,8 @@ class AfipEngineApi {
             const afip = new AfipServices();
 
             const params = {
-                filename: req.body.filename
+                filename: req.body.filename,
+                env: req.body.env
             }
 
             var jsonData = await afip.obtenerFactura(params)

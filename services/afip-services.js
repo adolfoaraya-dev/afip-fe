@@ -120,20 +120,20 @@ class AfipServices {
         try {
 
             const soapRequest = `<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ar="http://ar.gov.afip.dif.FEV1/">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <ar:FECompUltimoAutorizado>
-         <ar:Auth>
-            <ar:Token>${params.token}</ar:Token>
-            <ar:Sign>${params.sign}</ar:Sign>
-            <ar:Cuit>${params.cuit}</ar:Cuit>
-         </ar:Auth>
-         <ar:PtoVta>${params.ptoVta}</ar:PtoVta>
-         <ar:CbteTipo>${params.cbteTipo}</ar:CbteTipo>
-      </ar:FECompUltimoAutorizado>
-   </soapenv:Body>
-</soapenv:Envelope>`;
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ar="http://ar.gov.afip.dif.FEV1/">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <ar:FECompUltimoAutorizado>
+                        <ar:Auth>
+                            <ar:Token>${params.token}</ar:Token>
+                            <ar:Sign>${params.sign}</ar:Sign>
+                            <ar:Cuit>${params.cuit}</ar:Cuit>
+                        </ar:Auth>
+                        <ar:PtoVta>${params.ptoVta}</ar:PtoVta>
+                        <ar:CbteTipo>${params.cbteTipo}</ar:CbteTipo>
+                    </ar:FECompUltimoAutorizado>
+                </soapenv:Body>
+                </soapenv:Envelope>`;
 
 
             console.log('📤 Enviando request a AFIP WSFEv1...' + soapRequest);
@@ -342,9 +342,12 @@ class AfipServices {
                 </soapenv:Body>
                 </soapenv:Envelope>`;
 
+            const facturaPath = `logs/${config.env}/factura`;
+            await fs.mkdir(facturaPath, { recursive: true });
+           
             var filedate = Date.now();
-            await fs.writeFile(path.join(__dirname, '..', 'logs', `generar_factura_${filedate}_metadata.json`), JSON.stringify(params), 'utf8');
-            await fs.writeFile(path.join(__dirname, '..', 'logs', `generar_factura_${filedate}_request.xml`), soapRequest, 'utf8');
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_metadata.json`), JSON.stringify(params), 'utf8');
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_request.xml`), soapRequest, 'utf8');
 
             console.log('📤 Solicitando CAE a AFIP...', JSON.stringify(params, null, 2));
 
@@ -359,7 +362,7 @@ class AfipServices {
                 data: soapRequest
             });
 
-            await fs.writeFile(path.join(__dirname, '..', 'logs', `generar_factura_${filedate}_response.xml`), response.data, 'utf8');
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_response.xml`), response.data, 'utf8');
 
             console.log('📥 Respuesta recibida de AFIP');
 
@@ -449,19 +452,21 @@ class AfipServices {
 
     async obtenerFactura (params) {
     
-            console.log('obtenerFactura',params.filename)
+            console.log('obtenerFactura',params)
+            const facturaPath = path.join(__dirname, '..', `logs/${params.env}/factura`);
                 
            try {
     
         
-                    const filePath = path.join(__dirname, '../logs', params.filename);   
+                    const filePath = path.join(facturaPath, params.filename);
                     await fs.access(filePath);
     
                     const xmlData = await fs.readFile(filePath, 'utf8');
                     const jsonData = await parser.parseStringPromise(xmlData);
 
 
-                    const filePathReq = path.join(__dirname, '../logs', params.filename.replace('_response.xml','_metadata.json'));   
+                    const filePathReq = path.join(facturaPath, params.filename.replace('_response.xml','_metadata.json')); 
+                    //path.join(__dirname, facturaPath, params.filename.replace('_response.xml','_metadata.json'));   
                     await fs.access(filePathReq);
     
                     const jsonDataReq = await fs.readFile(filePathReq, 'utf8');

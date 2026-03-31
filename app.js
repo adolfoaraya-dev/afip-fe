@@ -2,20 +2,17 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3000;
-const fs = require('fs').promises; 
 
-const AfipFileLoader = require('./services/afip-file-loader');
-const AfipLoginCmsGenServices = require('./services/afip-cms-gen-services');
-const AfipServices = require('./services/afip-services');
 const AfipEngineApi = require('./api/afip-api');
 
-// Servir archivos estáticos
+// Servir archivos estáticos para Pages
 app.use(express.static(path.join(__dirname)));
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 
 app.use('/bootstrap/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
 app.use('/bootstrap/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
 app.use('/sweetalert2', express.static(path.join(__dirname, 'node_modules/sweetalert2/dist')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/moment/min')));
 
 
 // Middleware para parsear JSON

@@ -12,6 +12,7 @@ class HomeController {
             this.configurarEventos();
 
             var afiptoken = await  this.cargarAfipToken();
+            homeView.env = afiptoken.env;
             $('#env').html(`[${afiptoken.env}]`);
                 
 
@@ -73,8 +74,7 @@ class HomeController {
         });  
 
         return response.json();
-    }
-    
+    }    
 
 
     mostrarSesion(data) {
@@ -125,7 +125,7 @@ class HomeController {
         document.getElementById('btnVerFactura').addEventListener('click', () => {
             
                 let nombreArchivo = $('#txtFacturaArchivo').val();
-                const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}`;
+                const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}&env=${this.homeView.env}`;
                   window.open(url, '_blank');
         });
 
@@ -133,6 +133,28 @@ class HomeController {
     }
 
     async generarFactura(){
+        // Validar formato yyyy-mm-dd
+        if(!moment($('#fchServDesde').val(), 'YYYY-MM-DD', true).isValid())
+            return this.mostrarAlert( `Servicio Desde no valida: ${$('#fchServDesde').val()}`, true);
+
+        if(!moment($('#fchServHasta').val(), 'YYYY-MM-DD', true).isValid())
+            return this.mostrarAlert( `Servicio hasta no valida: ${$('#fchServHasta').val()}`, true);
+
+        if(moment($('#fchServDesde').val(), 'YYYY-MM-DD').isAfter(moment($('#fchServHasta').val(), 'YYYY-MM-DD')))
+            return this.mostrarAlert('La fecha Desde no puede ser mayor que la fecha Hasta', true);
+
+        if(moment($('#cbteFch').val(), 'YYYY-MM-DD').isAfter(moment()))
+            return this.mostrarAlert('La fecha del comprobante no puede ser futura', true);
+
+        const fechaCbte = moment($('#cbteFch').val(), 'YYYY-MM-DD');
+        const fechaVto = moment($('#fchVtoPago').val(), 'YYYY-MM-DD');
+
+        if(!fechaVto.isAfter(fechaCbte))
+            return this.mostrarAlert('La fecha de vencimiento debe ser mayor a la fecha de comprobante', true);
+
+        if(fechaVto.diff(fechaCbte, 'days') > 20)
+            return this.mostrarAlert('La fecha de vencimiento no puede superar los 20 días desde la fecha de comprobante', true);
+
             Swal.fire({
                 title: 'Consultando CUIT',
                 text: 'Buscando información en AFIP...',
@@ -185,6 +207,7 @@ class HomeController {
 
             if(data.data.condicionIVA.toLowerCase().includes('inscripto') == true &&  !$('#condicionIVAReceptorId option:selected').text().includes('Inscripto') )
                 return this.mostrarAlert( `Condicion IVA Receptor no coincide`,true);
+
 
 
            if(result.isConfirmed){

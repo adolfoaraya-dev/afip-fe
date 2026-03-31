@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const config = require('../config/app-config.json');
 
-class AfipFileLoader {
+class AfipCertificateLoader {
     constructor(certsPath = '../config') {
         this.certsPath = path.join(__dirname, certsPath);
 
@@ -109,4 +109,5 @@ class AfipFileLoader {
     }
 }
 
-module.exports = AfipFileLoader;
+module.exports = AfipCertificateLoader;
+
