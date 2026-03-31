@@ -115,14 +115,21 @@ app.post('/api/afip/obtener-factura', async (req, res) => {
 })
 
 
-// Ruta principal - sirve home.html
+// HOME
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'home', 'home.html'));
 });
 
+//FACTURA
 app.get('/factura', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'factura', 'factura.html'));
 });
+
+app.use('/css', (req, res, next) => {
+    if (!req.path.endsWith('.css')) return res.status(403).send('Forbidden');
+    next();
+}, express.static(path.join(__dirname, 'pages', 'factura')));
+
 
 // Iniciar servidor
 app.listen(port, () => {
