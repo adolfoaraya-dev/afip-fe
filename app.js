@@ -11,6 +11,7 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
 app.use('/bootstrap/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
 app.use('/bootstrap/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
+app.use('/bootstrap/icons', express.static('node_modules/bootstrap-icons/font'));
 app.use('/sweetalert2', express.static(path.join(__dirname, 'node_modules/sweetalert2/dist')));
 app.use('/js', express.static(path.join(__dirname, 'node_modules/moment/min')));
 

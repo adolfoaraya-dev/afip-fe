@@ -11,28 +11,28 @@ class HomeController {
 
             this.configurarEventos();
 
-            var afiptoken = await  this.cargarAfipToken();
+            var afiptoken = await this.cargarAfipToken();
             this.homeView.env = afiptoken.env;
             $('#env').html(`[${afiptoken.env}]`);
-                
+
 
             // Cargar datos del servidor
             const [condicionIvaReceptor, utimoComprobanteAutorizado] = await Promise.all([
                 this.condicionIvaReceptor(),
                 this.cargarUltimoComprobanteAutorizado(),
-                
+
             ]);
 
             this.mostrarSesion(afiptoken);
             this.mostrarUltimoComprobanteAutorizado(utimoComprobanteAutorizado);
-            this.mostrarCondicionIvaReceptor(condicionIvaReceptor);            
+            this.mostrarCondicionIvaReceptor(condicionIvaReceptor);
 
 
             $('#cbteFch').val(new Date().toISOString().slice(0, 10));
-           
-         
 
-   
+
+
+
             const ultimoDia = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
             $('#fchVtoPago').val(ultimoDia.toISOString().slice(0, 10));
 
@@ -48,7 +48,7 @@ class HomeController {
 
     async cargarUltimoComprobanteAutorizado() {
         const response = await fetch('/api/afip/ultimo-comprobante-autorizado', {
-            method: 'POST',  
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',  // ← Indicar que envías JSON
             },
@@ -56,7 +56,7 @@ class HomeController {
                 ptoVta: 1002,                                // Punto de venta
                 cbteTipo: 11                                  // Tipo comprobante
             })
-        });        
+        });
 
         this.homeView.ptoVta = 1002;
         this.homeView.cbteTipo = 11;
@@ -71,10 +71,10 @@ class HomeController {
                 'Content-Type': 'application/json',  // ← Indicar que envías JSON
             },
             body: JSON.stringify({})
-        });  
+        });
 
         return response.json();
-    }    
+    }
 
 
     mostrarSesion(data) {
@@ -88,22 +88,26 @@ class HomeController {
     }
 
     mostrarUltimoComprobanteAutorizado(data) {
+        if(data.error){
+            this.mostrarAlert(`Ultimo Comprobante Autorizado ${data.error}`, true);
+            return;
+        }
 
         this.homeView.cbteNro = data.data.cbteNro;
 
         $('#comprobante-info').html(`
-            <p>Info: ${data.message}</p>
-            <p>Comprobante Nro: ${data.data.cbteNro}</p>
+            <span>Info: ${data.message}</span>
+            <span>Comprobante Nro: ${data.data.cbteNro}</span>
         `);
 
-        $('#cbteDesde').val(data.data.cbteNro+1);
-        $('#cbteHasta').val(data.data.cbteNro+1);
+        $('#cbteDesde').val(data.data.cbteNro + 1);
+        $('#cbteHasta').val(data.data.cbteNro + 1);
     }
 
     mostrarCondicionIvaReceptor(data) {
 
-        let condiciones = data.data.condiciones.filter(c=> c.descripcion == 'IVA Responsable Inscripto' || 
-            c.descripcion == 'IVA Sujeto Exento' )
+        let condiciones = data.data.condiciones.filter(c => c.descripcion == 'IVA Responsable Inscripto' ||
+            c.descripcion == 'IVA Sujeto Exento')
 
 
 
@@ -123,72 +127,77 @@ class HomeController {
 
 
         document.getElementById('btnVerFactura').addEventListener('click', () => {
-            
-                let nombreArchivo = $('#txtFacturaArchivo').val();
-                const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}&env=${this.homeView.env}`;
-                  window.open(url, '_blank');
+
+            let nombreArchivo = $('#txtFacturaArchivo').val();
+            const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}&env=${this.homeView.env}`;
+            window.open(url, '_blank');
         });
 
-        
+        document.getElementById('btnCuit').addEventListener('click', () => {
+            this.consultarCuit().then(p => { });
+        });
+
+
     }
 
-    async generarFactura(){
+    async generarFactura() {
         // Validar formato yyyy-mm-dd
-        if(!moment($('#fchServDesde').val(), 'YYYY-MM-DD', true).isValid())
-            return this.mostrarAlert( `Servicio Desde no valida: ${$('#fchServDesde').val()}`, true);
+        if (!moment($('#fchServDesde').val(), 'YYYY-MM-DD', true).isValid())
+            return this.mostrarAlert(`Servicio Desde no valida: ${$('#fchServDesde').val()}`, true);
 
-        if(!moment($('#fchServHasta').val(), 'YYYY-MM-DD', true).isValid())
-            return this.mostrarAlert( `Servicio hasta no valida: ${$('#fchServHasta').val()}`, true);
+        if (!moment($('#fchServHasta').val(), 'YYYY-MM-DD', true).isValid())
+            return this.mostrarAlert(`Servicio hasta no valida: ${$('#fchServHasta').val()}`, true);
 
-        if(moment($('#fchServDesde').val(), 'YYYY-MM-DD').isAfter(moment($('#fchServHasta').val(), 'YYYY-MM-DD')))
+        if (moment($('#fchServDesde').val(), 'YYYY-MM-DD').isAfter(moment($('#fchServHasta').val(), 'YYYY-MM-DD')))
             return this.mostrarAlert('La fecha Desde no puede ser mayor que la fecha Hasta', true);
 
-        if(moment($('#cbteFch').val(), 'YYYY-MM-DD').isAfter(moment()))
+        if (moment($('#cbteFch').val(), 'YYYY-MM-DD').isAfter(moment()))
             return this.mostrarAlert('La fecha del comprobante no puede ser futura', true);
 
         const fechaCbte = moment($('#cbteFch').val(), 'YYYY-MM-DD');
         const fechaVto = moment($('#fchVtoPago').val(), 'YYYY-MM-DD');
+        const fchServHasta = moment($('#fchServHasta').val(), 'YYYY-MM-DD');
 
-        if(!fechaVto.isAfter(fechaCbte))
+        if (!fechaVto.isAfter(fechaCbte))
             return this.mostrarAlert('La fecha de vencimiento debe ser mayor a la fecha de comprobante', true);
 
-        if(fechaVto.diff(fechaCbte, 'days') > 20)
-            return this.mostrarAlert('La fecha de vencimiento no puede superar los 20 días desde la fecha de comprobante', true);
+        if (fechaVto.diff(fchServHasta, 'days') > 25)
+            return this.mostrarAlert('La fecha de vencimiento no puede superar los 20 días desde la fecha servicio hasta', true);
 
-            Swal.fire({
-                title: 'Consultando CUIT',
-                text: 'Buscando información en AFIP...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+        Swal.fire({
+            title: 'Consultando CUIT',
+            text: 'Buscando información en AFIP...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
-            const response = await fetch('/api/afip/consultar-cuit', {
-                                    method: 'POST', 
-                                    headers: {
-                                        'Content-Type': 'application/json',  
-                                    },
-                                    body: JSON.stringify({cuit: $('#docNro').val()})
-                                });
+        const response = await fetch('/api/afip/consultar-cuit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cuit: $('#docNro').val() })
+        });
 
-            const data = await response.json();
-            this.homeView.consultarcuit=data.data;
+        const data = await response.json();
+        this.homeView.consultarcuit = data.data;
 
-            Swal.close();           
+        Swal.close();
 
-            const domicilioCompleto = [
-                   data. data.domicilio?.direccion,
-                    data.data.domicilio?.localidad,
-                    data.data.domicilio?.provincia
-                    ].filter(Boolean).join(" ");
+        const domicilioCompleto = [
+            data.data.domicilio?.direccion,
+            data.data.domicilio?.localidad,
+            data.data.domicilio?.provincia
+        ].filter(Boolean).join(" ");
 
-            this.homeView.consultarcuit.domicilioCompleto = domicilioCompleto;
+        this.homeView.consultarcuit.domicilioCompleto = domicilioCompleto;
 
-            const result = await Swal.fire({
-                icon: 'success',
-                title: 'Datos encontrados',
-                html: `
+        const result = await Swal.fire({
+            icon: 'success',
+            title: 'Datos encontrados',
+            html: `
                     <div style="text-align: left">
                         <p><strong>Razón Social:</strong> ${data.data.razonSocial}</p>
                         <p><strong>CUIT:</strong> ${data.data.cuit}</p>
@@ -196,26 +205,26 @@ class HomeController {
                          <p><strong>Domicilio:</strong> ${domicilioCompleto}</p>
                     </div>
                 `,
-                showCancelButton: true,
-                confirmButtonText: '✅ Usar estos datos',
-                cancelButtonText: '❌ Cancelar'
-            });
-            
-
-            if(data.data.condicionIVA.toLowerCase().includes('exento') == true  &&  !$('#condicionIVAReceptorId option:selected').text().includes('Exento') )
-                return this.mostrarAlert( `Condicion IVA Receptor no coincide `,true);
-
-            if(data.data.condicionIVA.toLowerCase().includes('inscripto') == true &&  !$('#condicionIVAReceptorId option:selected').text().includes('Inscripto') )
-                return this.mostrarAlert( `Condicion IVA Receptor no coincide`,true);
+            showCancelButton: true,
+            confirmButtonText: '✅ Usar estos datos',
+            cancelButtonText: '❌ Cancelar'
+        });
 
 
+        if (data.data.condicionIVA.toLowerCase().includes('exento') == true && !$('#condicionIVAReceptorId option:selected').text().includes('Exento'))
+            return this.mostrarAlert(`Condicion IVA Receptor no coincide `, true);
 
-           if(result.isConfirmed){
-             this.generarFacturaSend();
-           }
+        if (data.data.condicionIVA.toLowerCase().includes('inscripto') == true && !$('#condicionIVAReceptorId option:selected').text().includes('Inscripto'))
+            return this.mostrarAlert(`Condicion IVA Receptor no coincide`, true);
+
+
+
+        if (result.isConfirmed) {
+            this.generarFacturaSend();
+        }
     }
 
-    async generarFacturaSend(){
+    async generarFacturaSend() {
 
         Swal.fire({
             title: 'Consultando CUIT',
@@ -227,19 +236,19 @@ class HomeController {
         });
 
         try {
-            
+
             //dateStr.replace(/-/g, '');
 
             const params = {
-                
+
                 metadata: {
                     consultarcuit: this.homeView.consultarcuit,
                     condicionIVAReceptor: $('#condicionIVAReceptorId option:selected').text()
                 },
                 cuit: "20312354846",
-                ptoVta: this.homeView.ptoVta,        
-                cbteTipo: this.homeView.cbteTipo,    
-                concepto:$('#concepto').val(),
+                ptoVta: this.homeView.ptoVta,
+                cbteTipo: this.homeView.cbteTipo,
+                concepto: $('#concepto').val(),
                 docTipo: $('#docTipo').val(),
                 docNro: $('#docNro').val(),
                 cbteDesde: $('#cbteDesde').val(),
@@ -251,49 +260,114 @@ class HomeController {
                 impTotal: $('#impTotal').val(),
                 impNeto: $('#impNeto').val(),
                 condicionIVAReceptorId: $('#condicionIVAReceptorId').val(),
-                obsMsg: $('#obsMsg').val() ,
-                obsCode: $('#obsCode').val() 
-                
+                obsMsg: $('#obsMsg').val(),
+                obsCode: $('#obsCode').val()
+
             }
 
-            const response =  await fetch('/api/afip/generar-factura', {
-                method: 'POST', 
+            const response = await fetch('/api/afip/generar-factura', {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',  
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(params)
-            })    
-            
+            })
 
-            
+
+
             const data = await response.json();
 
-           
 
-            Swal.close();        
 
-            if(data.success == true){
+            Swal.close();
+
+            if (data.success == true) {
                 this.mostrarAlert('Factura Generada!')
-                $('#txtFacturaArchivo').val( data.data.filetag);
+                $('#txtFacturaArchivo').val(data.data.filetag);
             }
             else
-                this.mostrarAlert( `ERROR ${data.errors[0].message}`,true);
-        
+                this.mostrarAlert(`ERROR ${data.errors[0].message}`, true);
+
         } catch (error) {
-             Swal.close();        
-            this.mostrarAlert( `ERROR ${error.errors[0].message}`,true);
+            Swal.close();
+            this.mostrarAlert(`ERROR ${error.errors[0].message}`, true);
         }
-       
+
     }
 
 
     async mostrarAlert(mensaje, error = false) {
         await Swal.fire({
-            icon: error ? 'error' : 'success'  ,  // 'success', 'error', 'warning', 'info'
-            title: error ? 'Error' : 'Éxito' ,
+            icon: error ? 'error' : 'success',  // 'success', 'error', 'warning', 'info'
+            title: error ? 'Error' : 'Éxito',
             text: mensaje,
-            confirmButtonColor: error ? '#dc3545':'#28a745' 
+            confirmButtonColor: error ? '#dc3545' : '#28a745'
         });
+    }
+
+
+    async consultarCuit() {
+        this.activarSpinBtn("btnCuit")
+        const response = await fetch('/api/afip/consultar-cuit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cuit: $('#docNro').val() })
+        });
+
+        const data = await response.json();
+        this.homeView.consultarcuit = data.data;
+        //alert(data.data)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.setCondicionIVASelect(data.data.condicionIVA);
+
+        $("#lblCuitInfo").html(`Razon Social: ${data.data.razonSocial} | ${moment().format('YYYY-MM-DD HH:mm:ss')}`)
+
+        this.desactivarSpinBtn("btnCuit")
+
+    }
+
+    setCondicionIVASelect(condicionIVA) {
+        const select = $('#condicionIVAReceptorId');
+        const valor = condicionIVA.toLowerCase();
+
+        let optionToSelect = null;
+
+        if (valor.includes('exento')) {
+            optionToSelect = select.find('option').filter(function () {
+                return $(this).text().toLowerCase().includes('exento');
+            });
+        }
+        else if (valor.includes('inscripto')) {
+            optionToSelect = select.find('option').filter(function () {
+                return $(this).text().toLowerCase().includes('inscripto');
+            });
+        }
+
+        if (optionToSelect && optionToSelect.length > 0) {
+            select.val(optionToSelect.val());
+        }
+    }
+
+    activarSpinBtn(btnId) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+
+        const icon = btn.querySelector('i');
+        if (!icon) return;
+
+        icon.classList.add('spin');
+    }
+
+    desactivarSpinBtn(btnId) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+
+        const icon = btn.querySelector('i');
+        if (!icon) return;
+
+        icon.classList.remove('spin');
     }
 
 }

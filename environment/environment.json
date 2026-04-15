@@ -1,5 +1,5 @@
 {
-    "env": "qa",
+    "env": "prod",
     "setting": {
         "prod": {
             "privateKey": "afip_private_key.txt",
