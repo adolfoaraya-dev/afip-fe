@@ -4,11 +4,13 @@ const parser = new xml2js.Parser({ explicitArray: false });
 const builder = new xml2js.Builder();
 const fs = require('fs').promises;
 const path = require('path');
-const config = require('../config/app-config.json');
+const config = require('../environment/environment.json');
 const { json } = require('stream/consumers');
 const { wrapper } = require("axios-cookiejar-support");
 const { CookieJar } = require("tough-cookie");
 const QRCode = require('qrcode');
+const storage = require('./memory-storage.js');
+const cheerio = require('cheerio');
 
 class AfipServices {
     constructor() {
@@ -18,10 +20,19 @@ class AfipServices {
         this.url = config.setting[config.env].url;
         this.urlLogin = config.setting[config.env].urlLogin;
 
+        this.loadCuitsStorage(config.setting[config.env].cuits);
+
     }
 
 
 
+    async loadCuitsStorage(cuits) {
+        cuits.forEach(async e => {
+             let result = await this.consultarCUIT({"cuit":e.cuit})
+             storage.set(e.cuit, result);            
+        });
+       
+    }
 
     async obtenerTicketAcceso(cms) {
         try {
@@ -555,6 +566,10 @@ class AfipServices {
 
     async consultarCUIT(params) {
     try {
+
+        if(storage.get(params.cuit) )
+            return storage.get(params.cuit) ;       
+
         const jar = new CookieJar();
         const client = wrapper(axios.create({ jar, withCredentials: true }));
 
@@ -593,24 +608,32 @@ class AfipServices {
     }
 
 
-    parseCUIT(html) {
-    const get = (regex) => html.match(regex)?.[1]?.trim() || "";
-
-    const razonSocial = get(/fw-bold text-dark[^>]*>\s*(.*?)\s*</);
-    const cuit = get(/CUIT<\/th>\s*<td>(\d+)<\/td>/);
-    const tipoPersona = get(/Tipo de Persona<\/th>\s*<td>(.*?)<\/td>/);
-    const estadoClave = get(/Estado de Clave<\/th>\s*<td>(.*?)<\/td>/);
-    const condicionIVA = get(/Condición IVA<\/th>[\s\S]*?<td[^>]*>(.*?)<\/td>/);
-
-    const direccion = get(/Dirección<\/th><td[^>]*>(.*?)<\/td>/);
-    const localidad = get(/Localidad<\/th><td>(.*?)<\/td>/);
-    const provincia = get(/Provincia<\/th><td>(.*?)<\/td>/);
-    const cp = get(/Código Postal<\/th><td[^>]*>(.*?)<\/td>/);
-
-    const actividad = get(/Actividad principal:<\/strong>(.*?)<\/li>/);
-
-    const impuestos = [...html.matchAll(/<li>(.*?)<\/li>/g)].map(m => m[1]);
-
+parseCUIT(html) {
+    const $ = cheerio.load(html);
+    
+    const getText = (selector) => $(selector).text().trim() || "";
+    
+    const razonSocial = $('.fs-4.fw-bold.text-dark').text().trim();
+    const cuit = $('th:contains("CUIT")').next('td').text().trim();
+    const tipoPersona = $('th:contains("Tipo de Persona")').next('td').text().trim();
+    const estadoClave = $('th:contains("Estado de Clave")').next('td').text().trim();
+    const condicionIVA = $('th:contains("Condición IVA")').next('td').find('.badge').text().trim();
+    
+    const direccion = $('th:contains("Dirección")').next('td').text().trim();
+    const localidad = $('th:contains("Localidad")').next('td').text().trim();
+    const provincia = $('th:contains("Provincia")').next('td').text().trim();
+    const cp = $('th:contains("Código Postal")').next('td').text().trim();
+    
+    const actividad = $('.mb-4 ul li').first().text().trim();
+    
+    const impuestos = [];
+    $('.mb-4 ul li').each((i, el) => {
+        const texto = $(el).text().trim();
+        if (texto && !texto.includes('SERVICIOS') && !texto.includes('HOSPEDAJE')) {
+            impuestos.push(texto);
+        }
+    });
+    
     return {
         razonSocial,
         cuit,
@@ -618,15 +641,15 @@ class AfipServices {
         estadoClave,
         condicionIVA,
         domicilio: {
-        direccion,
-        localidad,
-        provincia,
-        codigoPostal: cp,
+            direccion,
+            localidad,
+            provincia,
+            codigoPostal: cp,
         },
         actividadPrincipal: actividad,
         impuestos,
     };
-    }
+}
 
 
     async generarQr(params) {

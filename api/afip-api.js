@@ -1,8 +1,9 @@
 const fs = require('fs').promises;
 const path = require('path'); 
 const AfipLoginCmsGenServices = require('../services/afip-cms-gen-services'); 
+const AfipCertificateLoader = require('../services/afip-certificate-loader'); 
 const AfipServices = require('../services/afip-services'); 
-const config = require('../config/app-config.json');
+const config = require('../environment/environment.json');
 
 
 class AfipEngineApi {
@@ -58,7 +59,7 @@ class AfipEngineApi {
                 console.log('📁 No hay token válido en archivo - Generando nuevo');
             }
 
-            const fileLoader = new AfipFileLoader();
+            const fileLoader = new AfipCertificateLoader();
             const claves = await fileLoader.leerTodasLasClaves();
 
 

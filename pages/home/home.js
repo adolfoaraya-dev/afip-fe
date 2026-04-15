@@ -12,7 +12,7 @@ class HomeController {
             this.configurarEventos();
 
             var afiptoken = await  this.cargarAfipToken();
-            homeView.env = afiptoken.env;
+            this.homeView.env = afiptoken.env;
             $('#env').html(`[${afiptoken.env}]`);
                 
 

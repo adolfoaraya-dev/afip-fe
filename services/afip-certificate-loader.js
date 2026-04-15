@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const config = require('../config/app-config.json');
+const config = require('../environment/environment.json');
 
 class AfipCertificateLoader {
     constructor(certsPath = '../config') {
