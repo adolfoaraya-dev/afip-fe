@@ -7,6 +7,8 @@ const AfipEngineApi = require('./api/afip-api');
 
 // Servir archivos estáticos para Pages
 app.use(express.static(path.join(__dirname)));
+app.use('/assets', express.static(path.join(__dirname, 'pages', '.assets')));
+
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 
 app.use('/bootstrap/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
