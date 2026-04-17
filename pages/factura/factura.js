@@ -12,10 +12,10 @@ class FacturaController {
 
 
             const urlParams = new URLSearchParams(window.location.search);
-            const archivo = urlParams.get('archivo');
+            const tag = urlParams.get('tag');
             const env = urlParams.get('env');
 
-            var result = await this.obtenerFactura(archivo,env);
+            var result = await this.obtenerFactura(tag,env);
 
             document.getElementById('PtoVta').innerText = String(result.data.request.ptoVta).padStart(5, '0');
             document.getElementById('CbteDesde').innerText = String(result.data.request.cbteDesde).padStart(8, '0');
@@ -106,13 +106,14 @@ class FacturaController {
     }
 
 
-    async obtenerFactura(archivo,env) {
+    async obtenerFactura(tag,env) {
+
         const response = await fetch('/api/afip/obtener-factura', {
             method: 'POST',  //
             headers: {
                 'Content-Type': 'application/json',  // ← Indicar que envías JSON
             },
-            body: JSON.stringify({ filename: archivo,env:env })
+            body: JSON.stringify({ tag: tag,env:env })
         });
 
         return response.json();

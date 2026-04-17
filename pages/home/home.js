@@ -88,7 +88,7 @@ class HomeController {
     }
 
     mostrarUltimoComprobanteAutorizado(data) {
-        if(data.error){
+        if (data.error) {
             this.mostrarAlert(`Ultimo Comprobante Autorizado ${data.error}`, true);
             return;
         }
@@ -101,7 +101,7 @@ class HomeController {
         `);
 
         $('#cbteDesde').val(data.data.cbteNro + 1);
-        $('#cbteHasta').val(data.data.cbteNro + 1);
+        
     }
 
     mostrarCondicionIvaReceptor(data) {
@@ -128,8 +128,8 @@ class HomeController {
 
         document.getElementById('btnVerFactura').addEventListener('click', () => {
 
-            let nombreArchivo = $('#txtFacturaArchivo').val();
-            const url = `/factura?archivo=${encodeURIComponent(nombreArchivo)}&env=${this.homeView.env}`;
+            let tag = $('#txtFacturaArchivo').val();
+            const url = `/factura?tag=${encodeURIComponent(tag)}&env=${this.homeView.env}`;
             window.open(url, '_blank');
         });
 
@@ -210,6 +210,21 @@ class HomeController {
             cancelButtonText: '❌ Cancelar'
         });
 
+        if (this.homeView.env.toLowerCase() == 'prod') {
+            const msgEnv = await Swal.fire({
+                icon: 'warning',
+                title: 'PRODUCCIÓN',
+                html: `Estamos en el ambiente de PROD
+                `,
+                showCancelButton: true,
+                confirmButtonText: '✅ Continuar',
+                cancelButtonText: '❌ Cancelar'
+            });
+
+                 if (!msgEnv.isConfirmed) {
+                    return;
+                 }
+        }
 
         if (data.data.condicionIVA.toLowerCase().includes('exento') == true && !$('#condicionIVAReceptorId option:selected').text().includes('Exento'))
             return this.mostrarAlert(`Condicion IVA Receptor no coincide `, true);
@@ -252,7 +267,7 @@ class HomeController {
                 docTipo: $('#docTipo').val(),
                 docNro: $('#docNro').val(),
                 cbteDesde: $('#cbteDesde').val(),
-                cbteHasta: $('#cbteHasta').val(),
+                cbteHasta: $('#cbteDesde').val(),
                 cbteFch: $('#cbteFch').val().replace(/-/g, ''),
                 fchServDesde: $('#fchServDesde').val().replace(/-/g, ''),
                 fchServHasta: $('#fchServHasta').val().replace(/-/g, ''),

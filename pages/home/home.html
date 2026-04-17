@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
     <title>AFIP - Facturación Electrónica</title>
     <script src="/js/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -106,18 +107,12 @@
 
 <body>
     <div class="container">
-        <h2>AFIP - Facturación Electrónica
-             <span id="env" class="badge bg-info"></span>
-        </h2>
-
-
-
         <!-- Tarjeta de Facturación -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-file-earmark-text me-2 text-primary"></i>
-                    Generar Factura Electrónica
+                    Generar Factura Electrónica <span id="env" class="badge bg-info"></span>
                 </h5>
             </div>
 
@@ -202,37 +197,19 @@
 
 
 
-                <!-- Numeración -->
-                <h6 class="border-bottom pb-2 mb-3 text-primary">
-                    <i class="bi bi-123 me-2"></i>Numeración del Comprobante
-                </h6>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cbteDesde" class="form-label fw-semibold">Número Desde</label>
-                            <input type="number" class="form-control" id="cbteDesde" value="4" min="1">
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cbteHasta" class="form-label fw-semibold">Número Hasta</label>
-                            <input type="number" class="form-control" id="cbteHasta" value="4" min="1">
-
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Fechas -->
                 <h6 class="border-bottom pb-2 mb-3 text-primary ">
-                    <i class="bi bi-calendar me-2"></i>Fechas
+                    <i class="bi bi-calendar me-2"></i>Fecha de Comprobante
                 </h6>
 
                 <div class="row">
+
                     <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="cbteFch" class="form-label fw-semibold">Comprobante</label>
+                        <div class="mb-2">
+                            <label for="cbteFch" class="form-label fw-semibold">📤 Emisión</label>
                             <input type="date" class="form-control" id="cbteFch" value="20260316"
                                 placeholder="AAAAMMDD">
 
@@ -241,7 +218,7 @@
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="fchServDesde" class="form-label fw-semibold">Servicio Desde</label>
+                            <label for="fchServDesde" class="form-label fw-semibold">📅 Desde</label>
                             <input type="date" class="form-control" id="fchServDesde" value="20260301"
                                 placeholder="AAAAMMDD">
                         </div>
@@ -249,7 +226,7 @@
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="fchServHasta" class="form-label fw-semibold">Servicio Hasta</label>
+                            <label for="fchServHasta" class="form-label fw-semibold">📅 Hasta</label>
                             <input type="date" class="form-control" id="fchServHasta" value="20260331"
                                 placeholder="AAAAMMDD">
                         </div>
@@ -257,7 +234,7 @@
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="fchVtoPago" class="form-label fw-semibold">Vto. Pago</label>
+                            <label for="fchVtoPago" class="form-label fw-semibold">⏰ Vto. Pago</label>
                             <input type="date" class="form-control" id="fchVtoPago" value="20260410"
                                 placeholder="AAAAMMDD">
                         </div>
@@ -271,11 +248,21 @@
 
                 <div class="row">
                     <div class="col-md-3">
+                        <div class="mb-1">
+                            <label for="cbteDesde" class="form-label fw-semibold">#️⃣ Comp. Nro.</label>
+
+                            <input type="text" class="form-control" id="cbteDesde" value="0" inputmode="numeric"
+                                pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="impTotal" class="form-label fw-semibold">💰 Total</label>
+                            <label for="impTotal" class="form-label fw-semibold">💵 Total</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="impTotal" value="0" step="0.01">
+                                <!-- <input type="number" class="form-control" id="impTotal" value="0" step="0.01"> -->
+                                <input type="text" class="form-control" id="impTotal" value="0" inputmode="numeric"
+                                    pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                         </div>
                     </div>
@@ -285,14 +272,16 @@
                             <label for="impNeto" class="form-label fw-semibold">📊 Neto</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="impNeto" value="0" step="0.01">
+                                <!-- <input type="number" class="form-control" id="impNeto" value="0" step="0.01"> -->
+                                <input type="text" class="form-control" id="impNeto" value="0" inputmode="numeric"
+                                    pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="impIVA" class="form-label fw-semibold">🧾 IVA</label>
+                            <label for="impIVA" class="form-label fw-semibold">⚖️ IVA</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
                                 <input type="number" disabled class="form-control" id="impIVA" value="0" step="0.01">
@@ -300,9 +289,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-3 d-none">
                         <div class="mb-3">
-                            <label for="impTotConc" class="form-label fw-semibold">🚫 No Gravado</label>
+                            <label for="impTotConc" class="form-label fw-semibold">⚖️ No Gravado</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
                                 <input type="number" disabled class="form-control" id="impTotConc" value="0"
@@ -339,8 +328,8 @@
                         <button type="button" class="btn btn-outline-secondary px-4" id="limpiar-btn">
                             <i class="bi bi-eraser me-2"></i>Limpiar
                         </button>
-                        <button type="button" class="btn btn-success  px-4" id="btnVerFactura">
-                            <i class="bi bi-eraser me-2"></i>VER
+                        <button type="button" class="btn btn-success  px-4 float-end" id="btnVerFactura">
+                            <i class="bi bi-file-earmark-text me-2"></i>Abrir Factura
                         </button>
                     </div>
 
@@ -348,8 +337,9 @@
 
 
                 <div class="mb-4 mt-2">
+                    
                     <input type="text" class="form-control" id="txtFacturaArchivo"
-                        value="generar_factura_1774540328053_response.xml">
+                        value="generar_factura_1774540328053">
                 </div>
 
                 <!-- Resultado -->

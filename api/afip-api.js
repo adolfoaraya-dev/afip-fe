@@ -234,7 +234,7 @@ class AfipEngineApi {
             const afip = new AfipServices();
 
             const params = {
-                filename: req.body.filename,
+                tag: req.body.tag,
                 env: req.body.env
             }
 

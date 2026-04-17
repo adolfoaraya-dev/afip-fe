@@ -28,10 +28,10 @@ class AfipServices {
 
     async loadCuitsStorage(cuits) {
         cuits.forEach(async e => {
-             let result = await this.consultarCUIT({"cuit":e.cuit})
-             storage.set(e.cuit, result);            
+            let result = await this.consultarCUIT({ "cuit": e.cuit })
+            storage.set(e.cuit, result);
         });
-       
+
     }
 
     async obtenerTicketAcceso(cms) {
@@ -303,8 +303,15 @@ class AfipServices {
     }
 
     async generarFactura(params) {
+        let filedate = Date.now();
+        let returndata = null;
+        let requestSoap = null;
+        let response = null;
+
+
         try {
-            const soapRequest = `<?xml version="1.0" encoding="utf-8"?>
+            let resultado = null;
+            requestSoap = `<?xml version="1.0" encoding="utf-8"?>
                 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ar="http://ar.gov.afip.dif.FEV1/">
                 <soapenv:Header/>
                 <soapenv:Body>
@@ -353,16 +360,13 @@ class AfipServices {
                 </soapenv:Body>
                 </soapenv:Envelope>`;
 
-            const facturaPath = `logs/${config.env}/factura`;
-            await fs.mkdir(facturaPath, { recursive: true });
-           
-            var filedate = Date.now();
-            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_metadata.json`), JSON.stringify(params), 'utf8');
-            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_request.xml`), soapRequest, 'utf8');
+
+
+
 
             console.log('📤 Solicitando CAE a AFIP...', JSON.stringify(params, null, 2));
 
-            const response = await axios({
+            response = await axios({
                 method: 'post',
                 url: this.url,  // usa this.url que ya tienes
                 headers: {
@@ -370,10 +374,9 @@ class AfipServices {
                     'SOAPAction': 'http://ar.gov.afip.dif.FEV1/FECAESolicitar',
                     'User-Agent': 'Node.js AFIP Client'
                 },
-                data: soapRequest
+                data: requestSoap
             });
 
-            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_response.xml`), response.data, 'utf8');
 
             console.log('📥 Respuesta recibida de AFIP');
 
@@ -390,10 +393,44 @@ class AfipServices {
             const detalle = resultData['FeDetResp']['FECAEDetResponse'];
             const errors = resultData['Errors'];
 
+            console.log('responseData', responseData)
+            console.log('detalle', detalle)
+
+            //Success
+            if ((detalle?.CAE?.length ?? 0) > 2) {
+                returndata = {
+                    success: true,
+                    raw: response.data,
+                    data: {
+                        filetag: `generar_factura_${filedate}`,
+                        cabecera: {
+                            cuit: cabecera.Cuit,
+                            ptoVta: cabecera.PtoVta,
+                            cbteTipo: cabecera.CbteTipo,
+                            cantReg: parseInt(cabecera.CantReg, 10),
+                            resultado: cabecera.Resultado,
+                            fechaProceso: cabecera.FchProceso
+                        },
+                        comprobante: {
+                            concepto: detalle.Concepto,
+                            docTipo: detalle.DocTipo,
+                            docNro: detalle.DocNro,
+                            cbteDesde: parseInt(detalle.CbteDesde, 10),
+                            cbteHasta: parseInt(detalle.CbteHasta, 10),
+                            cbteFch: detalle.CbteFch,
+                            resultado: detalle.Resultado,
+                            cae: detalle.CAE,
+                            caeFchVto: detalle.CAEFchVto
+                        }
+                    }
+                };
+            }
+
+            //Error
             if (errors?.Err) {
                 const errs = Array.isArray(errors.Err) ? errors.Err : [errors.Err];
 
-                return {
+                returndata = {
                     success: false,
                     errors: errs.map(e => ({
                         code: e.Code,
@@ -401,31 +438,20 @@ class AfipServices {
                     }))
                 };
             }
+            //Error
+            else if (detalle?.CAE == null || detalle?.CAE == '') {
+                console.log(detalle)
 
+                returndata = {
+                    success: false,
+                    errors: [{
+                        code: detalle.Observaciones.Obs.Code,
+                        message: detalle.Observaciones.Obs.Msg
+                    }]
+                };
 
+            }
 
-            const resultado = {
-                filetag: `generar_factura_${filedate}_response.xml`,
-                cabecera: {
-                    cuit: cabecera.Cuit,
-                    ptoVta: cabecera.PtoVta,
-                    cbteTipo: cabecera.CbteTipo,
-                    cantReg: parseInt(cabecera.CantReg, 10),
-                    resultado: cabecera.Resultado,
-                    fechaProceso: cabecera.FchProceso
-                },
-                comprobante: {
-                    concepto: detalle.Concepto,
-                    docTipo: detalle.DocTipo,
-                    docNro: detalle.DocNro,
-                    cbteDesde: parseInt(detalle.CbteDesde, 10),
-                    cbteHasta: parseInt(detalle.CbteHasta, 10),
-                    cbteFch: detalle.CbteFch,
-                    resultado: detalle.Resultado,
-                    cae: detalle.CAE,
-                    caeFchVto: detalle.CAEFchVto
-                }
-            };
 
             // Mostrar eventos/advertencias si existen
             if (resultData.Events?.Evt) {
@@ -441,11 +467,7 @@ class AfipServices {
                 console.log('⚠️ Eventos:', resultado.eventos);
             }
 
-            return {
-                success: true,
-                data: resultado,
-                raw: response.data
-            };
+
 
         } catch (error) {
             console.error('❌ Error en FECAESolicitar:', error.message);
@@ -453,49 +475,67 @@ class AfipServices {
                 console.error('Status:', error.response.status);
                 console.error('Data:', error.response.data);
             }
-            return {
+            returndata = {
                 success: false,
                 error: error.message,
                 details: error.response?.data
             };
         }
+
+
+        try {
+
+
+            const facturaPath = `logs/${config.env}/factura/${returndata.success ? 'ok' : 'error'}`;
+
+            await fs.mkdir(facturaPath, { recursive: true });
+
+            
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_metadata.json`), JSON.stringify(params), 'utf8');
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_request.xml`), requestSoap, 'utf8');
+            await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_response.xml`), response.data, 'utf8');
+        } catch (e) {
+            console.error('❌ Error en writeFile:', e);
+        }
+
+        return returndata;
     }
 
-    async obtenerFactura (params) {
-    
-            console.log('obtenerFactura',params)
-            const facturaPath = path.join(__dirname, '..', `logs/${params.env}/factura`);
-                
-           try {
-    
-        
-                    const filePath = path.join(facturaPath, params.filename);
-                    await fs.access(filePath);
-    
-                    const xmlData = await fs.readFile(filePath, 'utf8');
-                    const jsonData = await parser.parseStringPromise(xmlData);
+    async obtenerFactura(params) {
+
+        console.log('obtenerFactura', params)
+        const facturaPath = path.join(__dirname, '..', `logs/${params.env}/factura/ok`);
+
+        try {
+
+            
 
 
-                    const filePathReq = path.join(facturaPath, params.filename.replace('_response.xml','_metadata.json')); 
-                    //path.join(__dirname, facturaPath, params.filename.replace('_response.xml','_metadata.json'));   
-                    await fs.access(filePathReq);
-    
-                    const jsonDataReq = await fs.readFile(filePathReq, 'utf8');
-    
-                    return {
-                        success: true,
-                        response: jsonData,
-                        request: JSON.parse(jsonDataReq)
-                    };
-    
-    
-            } catch (error) {
-                console.error('❌ Error:', error);
-                return {
-                    success: false,
-                    message: error.message
-                };
-            }
+            const filePath = path.join(facturaPath, `${params.tag}_response.xml`);
+            await fs.access(filePath);
+
+            const xmlData = await fs.readFile(filePath, 'utf8');
+            const jsonData = await parser.parseStringPromise(xmlData);
+
+
+            const filePathReq = path.join(facturaPath, `${params.tag}_metadata.json`);
+            
+            await fs.access(filePathReq);
+
+            const jsonDataReq = await fs.readFile(filePathReq, 'utf8');
+
+            return {
+                success: true,
+                response: jsonData,
+                request: JSON.parse(jsonDataReq)
+            };
+
+
+        } catch (error) {
+            console.error('❌ Error:', error);
+        }
+
+        return resultdata
     }
 
     async consultarCUIT_(params) {
@@ -510,9 +550,9 @@ class AfipServices {
                 }
             });
 
-                let html = response.data;
+            let html = response.data;
 
-                const clean = (txt) =>
+            const clean = (txt) =>
                 txt
                     .replace(/&#8226;/g, '•')
                     .replace(/&nbsp;/g, ' ')
@@ -520,36 +560,36 @@ class AfipServices {
                     .replace(/\s+/g, ' ')
                     .trim();
 
-                const get = (txt, r) =>
+            const get = (txt, r) =>
                 clean(txt.match(r)?.[1] || '');
 
-                // 🔹 aislar SOLO el resultado
-                const hit = html.match(/<div class="hit"[\s\S]*?<\/div>\s*<\/div>/)?.[0];
+            // 🔹 aislar SOLO el resultado
+            const hit = html.match(/<div class="hit"[\s\S]*?<\/div>\s*<\/div>/)?.[0];
 
-                if (!hit) return { success: false };
+            if (!hit) return { success: false };
 
-                const razonSocial = get(hit, /<h2 class="denominacion"[^>]*>(.*?)<\/h2>/);
+            const razonSocial = get(hit, /<h2 class="denominacion"[^>]*>(.*?)<\/h2>/);
 
-                const cuit = get(hit, /<span class="cuit">(.*?)<\/span>/)
+            const cuit = get(hit, /<span class="cuit">(.*?)<\/span>/)
                 .replace(/\D/g, '');
 
-                const bloque = get(hit, /<div class="doc-facets"[^>]*>([\s\S]*?)<\/div>/);
+            const bloque = get(hit, /<div class="doc-facets"[^>]*>([\s\S]*?)<\/div>/);
 
-                const detalle = bloque
+            const detalle = bloque
                 ? [...bloque.matchAll(/<\/span>\s*([^<]+?)\s*<br\s*\/?>/gi)]
                     .map(m =>
                         m[1]
-                        .replace(/&nbsp;/g, ' ')
-                        .replace(/\s+/g, ' ')
-                        .trim()
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/\s+/g, ' ')
+                            .trim()
                     )
                     .filter(x => x && !x.startsWith('CUIT'))
                 : [];
 
-                return {
+            return {
                 success: true,
                 data: { cuit, razonSocial, detalle }
-                };
+            };
 
 
 
@@ -565,117 +605,117 @@ class AfipServices {
     }
 
     async consultarCUIT(params) {
-    try {
+        try {
 
-        if(storage.get(params.cuit) )
-            return storage.get(params.cuit) ;       
+            if (storage.get(params.cuit))
+                return storage.get(params.cuit);
 
-        const jar = new CookieJar();
-        const client = wrapper(axios.create({ jar, withCredentials: true }));
+            const jar = new CookieJar();
+            const client = wrapper(axios.create({ jar, withCredentials: true }));
 
-        const url = "https://sistemas360.ar/cuitonline";
+            const url = "https://sistemas360.ar/cuitonline";
 
-        // 1) GET primero (genera sesión + CSRF válido)
-        const page = await client.get(url);
+            // 1) GET primero (genera sesión + CSRF válido)
+            const page = await client.get(url);
 
-        const token = page.data.match(/name="_token"\s+value="(.+?)"/)?.[1];
+            const token = page.data.match(/name="_token"\s+value="(.+?)"/)?.[1];
 
-        // 2) POST con MISMA sesión (cookie jar)
-        const data = new URLSearchParams({
-        _token: token,
-        cuit: params.cuit || "30707617078",
-        });
+            // 2) POST con MISMA sesión (cookie jar)
+            const data = new URLSearchParams({
+                _token: token,
+                cuit: params.cuit || "30707617078",
+            });
 
-        const response = await client.post(url, data, {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Origin": "https://sistemas360.ar",
-            "Referer": url,
-        },
-        });
+            const response = await client.post(url, data, {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Origin": "https://sistemas360.ar",
+                    "Referer": url,
+                },
+            });
 
-        return {
-            success: true,
-            data: this.parseCUIT(response.data),
-        };
-    } catch (error) {
-        return {
-        success: false,
-        error: error.message,
-        details: error.response?.data,
-        };
-    }
-    }
-
-
-parseCUIT(html) {
-    const $ = cheerio.load(html);
-    
-    const getText = (selector) => $(selector).text().trim() || "";
-    
-    const razonSocial = $('.fs-4.fw-bold.text-dark').text().trim();
-    const cuit = $('th:contains("CUIT")').next('td').text().trim();
-    const tipoPersona = $('th:contains("Tipo de Persona")').next('td').text().trim();
-    const estadoClave = $('th:contains("Estado de Clave")').next('td').text().trim();
-    const condicionIVA = $('th:contains("Condición IVA")').next('td').find('.badge').text().trim();
-    
-    const direccion = $('th:contains("Dirección")').next('td').text().trim();
-    const localidad = $('th:contains("Localidad")').next('td').text().trim();
-    const provincia = $('th:contains("Provincia")').next('td').text().trim();
-    const cp = $('th:contains("Código Postal")').next('td').text().trim();
-    
-    const actividad = $('.mb-4 ul li').first().text().trim();
-    
-    const impuestos = [];
-    $('.mb-4 ul li').each((i, el) => {
-        const texto = $(el).text().trim();
-        if (texto && !texto.includes('SERVICIOS') && !texto.includes('HOSPEDAJE')) {
-            impuestos.push(texto);
+            return {
+                success: true,
+                data: this.parseCUIT(response.data),
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message,
+                details: error.response?.data,
+            };
         }
-    });
-    
-    return {
-        razonSocial,
-        cuit,
-        tipoPersona,
-        estadoClave,
-        condicionIVA,
-        domicilio: {
-            direccion,
-            localidad,
-            provincia,
-            codigoPostal: cp,
-        },
-        actividadPrincipal: actividad,
-        impuestos,
-    };
-}
+    }
+
+
+    parseCUIT(html) {
+        const $ = cheerio.load(html);
+
+        const getText = (selector) => $(selector).text().trim() || "";
+
+        const razonSocial = $('.fs-4.fw-bold.text-dark').text().trim();
+        const cuit = $('th:contains("CUIT")').next('td').text().trim();
+        const tipoPersona = $('th:contains("Tipo de Persona")').next('td').text().trim();
+        const estadoClave = $('th:contains("Estado de Clave")').next('td').text().trim();
+        const condicionIVA = $('th:contains("Condición IVA")').next('td').find('.badge').text().trim();
+
+        const direccion = $('th:contains("Dirección")').next('td').text().trim();
+        const localidad = $('th:contains("Localidad")').next('td').text().trim();
+        const provincia = $('th:contains("Provincia")').next('td').text().trim();
+        const cp = $('th:contains("Código Postal")').next('td').text().trim();
+
+        const actividad = $('.mb-4 ul li').first().text().trim();
+
+        const impuestos = [];
+        $('.mb-4 ul li').each((i, el) => {
+            const texto = $(el).text().trim();
+            if (texto && !texto.includes('SERVICIOS') && !texto.includes('HOSPEDAJE')) {
+                impuestos.push(texto);
+            }
+        });
+
+        return {
+            razonSocial,
+            cuit,
+            tipoPersona,
+            estadoClave,
+            condicionIVA,
+            domicilio: {
+                direccion,
+                localidad,
+                provincia,
+                codigoPostal: cp,
+            },
+            actividadPrincipal: actividad,
+            impuestos,
+        };
+    }
 
 
     async generarQr(params) {
-    try {
+        try {
 
-        const dataURL = await QRCode.toDataURL(params.qrUrl, {
-            width: 200,
-            margin: 2
-        });
-        console.log('✅ QR generado como base64');
-        
-   
-        return {
-            success: true,
-            data: dataURL,
-        };
-    } catch (error) {
-        return {
-        success: false,
-        error: error.message,
-        details: error.response?.data,
-        };
-    }
+            const dataURL = await QRCode.toDataURL(params.qrUrl, {
+                width: 200,
+                margin: 2
+            });
+            console.log('✅ QR generado como base64');
+
+
+            return {
+                success: true,
+                data: dataURL,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message,
+                details: error.response?.data,
+            };
+        }
     }
 
-    
+
 }
 
 module.exports = AfipServices;
