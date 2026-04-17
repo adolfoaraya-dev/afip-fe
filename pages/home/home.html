@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #ccc;
+            background-color: #333;
         }
 
         p {
@@ -106,10 +106,10 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container  text-bg-dark">
         <!-- Tarjeta de Facturación -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
+        <div class="card shadow-sm mb-4  text-bg-dark">
+            <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-file-earmark-text me-2 text-primary"></i>
                     Generar Factura Electrónica <span id="env" class="badge bg-info"></span>
@@ -159,7 +159,8 @@
                     <div class="col-md-1">
                         <div class="">
                             <label for="concepto" class="form-label fw-semibold"></label>
-                            <button type="button" class="btn btn-success" id="btnCuit" style="margin-top: 7px;">
+                            <button type="button" class="btn btn-success" id="btnCuit" style="margin-top: 7px;"
+                                onclick="app.consultarCuit()">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
 
@@ -210,7 +211,7 @@
                     <div class="col-md-3">
                         <div class="mb-2">
                             <label for="cbteFch" class="form-label fw-semibold">📤 Emisión</label>
-                            <input type="date" class="form-control" id="cbteFch" value="20260316"
+                            <input type="date" class="form-control" id="cbteFch"  value="2026-04-16"
                                 placeholder="AAAAMMDD">
 
                         </div>
@@ -219,7 +220,7 @@
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="fchServDesde" class="form-label fw-semibold">📅 Desde</label>
-                            <input type="date" class="form-control" id="fchServDesde" value="20260301"
+                            <input type="date" class="form-control" id="fchServDesde" value="2000-01-01"
                                 placeholder="AAAAMMDD">
                         </div>
                     </div>
@@ -227,7 +228,7 @@
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="fchServHasta" class="form-label fw-semibold">📅 Hasta</label>
-                            <input type="date" class="form-control" id="fchServHasta" value="20260331"
+                            <input type="date" class="form-control" id="fchServHasta" value="2000-01-01"
                                 placeholder="AAAAMMDD">
                         </div>
                     </div>
@@ -235,7 +236,7 @@
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="fchVtoPago" class="form-label fw-semibold">⏰ Vto. Pago</label>
-                            <input type="date" class="form-control" id="fchVtoPago" value="20260410"
+                            <input type="date" class="form-control" id="fchVtoPago" value="2000-01-01"
                                 placeholder="AAAAMMDD">
                         </div>
                     </div>
@@ -322,13 +323,16 @@
                 <!-- Botones de Acción -->
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" id="btGenerarFactura" class="btn btn-primary px-4 m-0">
+                        <button type="button" id="btGenerarFactura" class="btn btn-primary px-4 m-0"
+                            onclick="app.generarFactura()">
                             <i class="bi bi-send me-2"></i>Generar Factura
                         </button>
-                        <button type="button" class="btn btn-outline-secondary px-4" id="limpiar-btn">
+                        <button type="button" class="btn btn-outline-secondary px-4" id="limpiar-btn"
+                            onclick="app.limpiarCampos()">
                             <i class="bi bi-eraser me-2"></i>Limpiar
                         </button>
-                        <button type="button" class="btn btn-success  px-4 float-end" id="btnVerFactura">
+                        <button type="button" class="btn btn-success  px-4 float-end" id="btnVerFactura"
+                            onclick="app.verFactura()">
                             <i class="bi bi-file-earmark-text me-2"></i>Abrir Factura
                         </button>
                     </div>
@@ -337,7 +341,7 @@
 
 
                 <div class="mb-4 mt-2">
-                    
+
                     <input type="text" class="form-control" id="txtFacturaArchivo"
                         value="generar_factura_1774540328053">
                 </div>
@@ -347,14 +351,20 @@
             </div>
         </div>
         <section id="session">
-            <h6>Información de Sesión</h6>
-            <div id="session-info" class="cargando">Cargando sesión...</div>
+            <h6 class="border-bottom pb-2 mb-3 text-primary ">
+                <i class="bi bi-lock me-2"></i>Información de Sesión
+            </h6>
+            <code id="session-info"></code>
+
         </section>
 
         <section id="comprobante">
-            <h6>Información de Comprobante</h6>
-            <div id="comprobante-info" class="cargando">Cargando comprobante...</div>
+            <h6 class="border-bottom pb-2 mb-3 text-primary ">
+                <i class="bi bi-bar-chart me-2"></i>Información de Comprobante
+            </h6>
+            <code id="comprobante-info"></code>
         </section>
+
 
     </div>
 

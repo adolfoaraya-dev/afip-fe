@@ -9,8 +9,6 @@ class HomeController {
     async inicializar() {
         try {
 
-            this.configurarEventos();
-
             var afiptoken = await this.cargarAfipToken();
             this.homeView.env = afiptoken.env;
             $('#env').html(`[${afiptoken.env}]`);
@@ -120,22 +118,13 @@ class HomeController {
 
     }
 
-    configurarEventos() {
-        document.getElementById('btGenerarFactura').addEventListener('click', () => {
-            this.generarFactura();
-        });
-
-
-        document.getElementById('btnVerFactura').addEventListener('click', () => {
-
+    verFactura() {
+  
             let tag = $('#txtFacturaArchivo').val();
             const url = `/factura?tag=${encodeURIComponent(tag)}&env=${this.homeView.env}`;
             window.open(url, '_blank');
-        });
+       
 
-        document.getElementById('btnCuit').addEventListener('click', () => {
-            this.consultarCuit().then(p => { });
-        });
 
 
     }
@@ -385,6 +374,7 @@ class HomeController {
         icon.classList.remove('spin');
     }
 
+    limpiarCampos(){alert(0)}
 }
 
 // Iniciar la aplicación
