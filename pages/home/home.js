@@ -8,10 +8,24 @@ class HomeController {
 
     async inicializar() {
         try {
+   
 
             var afiptoken = await this.cargarAfipToken();
             this.homeView.env = afiptoken.env;
             $('#env').html(`[${afiptoken.env}]`);
+
+            if (afiptoken.success == false) {
+               
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Afip Token',
+                    html: `${afiptoken.message}<br>${afiptoken.details}<br>${afiptoken?.cmsGenerado?.tra}`,
+                    confirmButtonText: 'OK',
+
+                });
+                 return;
+            }
+
 
 
             // Cargar datos del servidor
@@ -99,7 +113,7 @@ class HomeController {
         `);
 
         $('#cbteDesde').val(data.data.cbteNro + 1);
-        
+
     }
 
     mostrarCondicionIvaReceptor(data) {
@@ -119,11 +133,11 @@ class HomeController {
     }
 
     verFactura() {
-  
-            let tag = $('#txtFacturaArchivo').val();
-            const url = `/factura?tag=${encodeURIComponent(tag)}&env=${this.homeView.env}`;
-            window.open(url, '_blank');
-       
+
+        let tag = $('#txtFacturaArchivo').val();
+        const url = `/factura?tag=${encodeURIComponent(tag)}&env=${this.homeView.env}`;
+        window.open(url, '_blank');
+
 
 
 
@@ -210,9 +224,9 @@ class HomeController {
                 cancelButtonText: '❌ Cancelar'
             });
 
-                 if (!msgEnv.isConfirmed) {
-                    return;
-                 }
+            if (!msgEnv.isConfirmed) {
+                return;
+            }
         }
 
         if (data.data.condicionIVA.toLowerCase().includes('exento') == true && !$('#condicionIVAReceptorId option:selected').text().includes('Exento'))
@@ -290,11 +304,11 @@ class HomeController {
                 $('#txtFacturaArchivo').val(data.data.filetag);
             }
             else
-                this.mostrarAlert(`ERROR ${data.errors[0].message}`, true);
+                this.mostrarAlert(`ERROR ${data.errors.message}`, true);
 
         } catch (error) {
             Swal.close();
-            this.mostrarAlert(`ERROR ${error.errors[0].message}`, true);
+            this.mostrarAlert(`ERROR ${error?.message}`, true);
         }
 
     }
@@ -374,7 +388,7 @@ class HomeController {
         icon.classList.remove('spin');
     }
 
-    limpiarCampos(){alert(0)}
+    limpiarCampos() { alert(0) }
 }
 
 // Iniciar la aplicación

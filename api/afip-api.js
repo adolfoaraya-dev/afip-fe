@@ -184,6 +184,9 @@ class AfipEngineApi {
         try {
 
             const auth = await this.login()
+            if(auth.success == false || auth.data?.ticket?.token == null){
+                throw new Error("Falló autenticación.");
+            }
 
             const afip = new AfipServices();
 

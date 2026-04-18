@@ -428,14 +428,14 @@ class AfipServices {
 
             //Error
             if (errors?.Err) {
-                const errs = Array.isArray(errors.Err) ? errors.Err : [errors.Err];
+                const err = Array.isArray(errors.Err) ? errors.Err[0] : errors.Err;
 
                 returndata = {
                     success: false,
-                    errors: errs.map(e => ({
-                        code: e.Code,
-                        message: e.Msg
-                    }))
+                    errors: {
+                        code: err.Code,
+                        message: err.Msg
+                    }
                 };
             }
             //Error
@@ -444,10 +444,10 @@ class AfipServices {
 
                 returndata = {
                     success: false,
-                    errors: [{
+                    errors: {
                         code: detalle.Observaciones.Obs.Code,
                         message: detalle.Observaciones.Obs.Msg
-                    }]
+                    }
                 };
 
             }
@@ -490,7 +490,7 @@ class AfipServices {
 
             await fs.mkdir(facturaPath, { recursive: true });
 
-            
+
             await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_metadata.json`), JSON.stringify(params), 'utf8');
             await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_request.xml`), requestSoap, 'utf8');
             await fs.writeFile(path.join(__dirname, '..', facturaPath, `generar_factura_${filedate}_response.xml`), response.data, 'utf8');
@@ -508,7 +508,7 @@ class AfipServices {
 
         try {
 
-            
+
 
 
             const filePath = path.join(facturaPath, `${params.tag}_response.xml`);
@@ -519,7 +519,7 @@ class AfipServices {
 
 
             const filePathReq = path.join(facturaPath, `${params.tag}_metadata.json`);
-            
+
             await fs.access(filePathReq);
 
             const jsonDataReq = await fs.readFile(filePathReq, 'utf8');
