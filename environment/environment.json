@@ -20,7 +20,7 @@
         "qa": {
             "privateKey": "afip_private_key_qa.txt",
             "certificatePem": "afip_certificate_pem_qa.txt",
-            "url": "https://wsaaext2.afip.gov.ar/wsfev1/service.asmx",
+            "url": "https://wswhomo.afip.gov.ar/wsfev1/service.asmx",
             "urlLogin": "https://wsaahomo.afip.gov.ar/ws/services/LoginCms",
             "cuits": [
                 {

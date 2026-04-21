@@ -9,11 +9,12 @@ class HomeController {
     async inicializar() {
         try {
    
+            var envApi = await this.getEnvironment()
+            this.homeView.env = envApi.env;
+            $('#env').html(`[${envApi.env.toLocaleUpperCase()}]`);
 
-            var afiptoken = await this.cargarAfipToken();
-            this.homeView.env = afiptoken.env;
-            $('#env').html(`[${afiptoken.env}]`);
-
+            var afiptoken = await this.cargarAfipToken();           
+           
             if (afiptoken.success == false) {
                
                 await Swal.fire({
@@ -48,9 +49,20 @@ class HomeController {
             const ultimoDia = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
             $('#fchVtoPago').val(ultimoDia.toISOString().slice(0, 10));
 
+            
+
         } catch (error) {
             console.error('Error al cargar datos:', error);
         }
+
+        await new Promise(r => setTimeout(r, 1000)); 
+
+        $("#spLoad").hide();
+    }
+
+    async getEnvironment() {
+        const response = await fetch('/api/env');
+        return response.json();
     }
 
     async cargarAfipToken() {
@@ -199,21 +211,21 @@ class HomeController {
 
         const result = await Swal.fire({
             icon: 'success',
-            title: 'Datos encontrados',
+            title: `${data.data.razonSocial}`,
             html: `
                     <div style="text-align: left">
-                        <p><strong>Razón Social:</strong> ${data.data.razonSocial}</p>
-                        <p><strong>CUIT:</strong> ${data.data.cuit}</p>
-                        <p><strong>Actividad Principal:</strong> ${data.data.actividadPrincipal}</p>
-                         <p><strong>Domicilio:</strong> ${domicilioCompleto}</p>
+                        <p>Razón Social: <strong>${data.data.razonSocial}</strong> </p>
+                        <p>CUIT:<strong>${data.data.cuit}</strong></p>
+                        <p>Actividad Principal: ${data.data.actividadPrincipal}</p>
+                        <p>Domicilio:${domicilioCompleto}</p>
                     </div>
                 `,
             showCancelButton: true,
-            confirmButtonText: '✅ Usar estos datos',
+            confirmButtonText: '✅ Aceptar',
             cancelButtonText: '❌ Cancelar'
         });
 
-        if (this.homeView.env.toLowerCase() == 'prod') {
+        if (this.homeView?.env?.toLowerCase() == 'prod') {
             const msgEnv = await Swal.fire({
                 icon: 'warning',
                 title: 'PRODUCCIÓN',
@@ -245,8 +257,8 @@ class HomeController {
     async generarFacturaSend() {
 
         Swal.fire({
-            title: 'Consultando CUIT',
-            text: 'Buscando información en AFIP...',
+            title: 'Generando Factura',
+            //text: 'Buscando información en AFIP...',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
@@ -304,7 +316,7 @@ class HomeController {
                 $('#txtFacturaArchivo').val(data.data.filetag);
             }
             else
-                this.mostrarAlert(`ERROR ${data.errors.message}`, true);
+                this.mostrarAlert(`ERROR ${data.errors?.message}`, true);
 
         } catch (error) {
             Swal.close();

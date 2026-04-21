@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+const config = require('./environment/environment.json');
 const AfipEngineApi = require('./api/afip-api');
 
 // Servir archivos estáticos para Pages
@@ -22,6 +23,15 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/moment/min')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+app.get('/api/env', async (req, res) => {
+
+        result = {
+            env: config.env 
+        }
+
+         res.json(result);
+})
 
 
 app.get('/api/afip/login-completo', async (req, res) => {
@@ -89,8 +99,6 @@ app.post('/api/afip/generar-qr', async (req, res) => {
 
 })
 
-
-
 app.post('/api/afip/generar-factura', async (req, res) => {
     const afipEngineApi = new AfipEngineApi();
 
@@ -117,7 +125,7 @@ app.post('/api/afip/obtener-factura', async (req, res) => {
 
 })
 
-
+/*** PAGES ************ */
 // HOME
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'home', 'home.html'));
