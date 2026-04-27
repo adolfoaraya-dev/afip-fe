@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Header>
+        <FEHeaderInfo xmlns="http://ar.gov.afip.dif.FEV1/">
+            <ambiente>Produccion - se3</ambiente>
+            <fecha>2026-04-26T20:56:42.7102369-03:00</fecha>
+            <id>6.1.0.0</id>
+        </FEHeaderInfo>
+    </soap:Header>
+    <soap:Body>
+        <FECAESolicitarResponse xmlns="http://ar.gov.afip.dif.FEV1/">
+            <FECAESolicitarResult>
+                <FeCabResp>
+                    <Cuit>20312354846</Cuit>
+                    <PtoVta>1002</PtoVta>
+                    <CbteTipo>11</CbteTipo>
+                    <FchProceso>20260426205642</FchProceso>
+                    <CantReg>1</CantReg>
+                    <Resultado>A</Resultado>
+                    <Reproceso>N</Reproceso>
+                </FeCabResp>
+                <FeDetResp>
+                    <FECAEDetResponse>
+                        <Concepto>3</Concepto>
+                        <DocTipo>80</DocTipo>
+                        <DocNro>30707617078</DocNro>
+                        <CbteDesde>5</CbteDesde>
+                        <CbteHasta>5</CbteHasta>
+                        <CbteFch>20260426</CbteFch>
+                        <Resultado>A</Resultado>
+                        <CAE>86173120640051</CAE>
+                        <CAEFchVto>20260506</CAEFchVto>
+                    </FECAEDetResponse>
+                </FeDetResp>
+                <Events>
+                    <Evt>
+                        <Code>43</Code>
+                        <Msg>IMPORTANTE: Se encuentra disponible en modo testing la version 4.3
+                            https://www.arca.gob.ar/fe/ayuda/documentos/wsfev1-RG-4291.pdf del
+                            manual del desarrollador para el ambiente
+                            http://wswhomo.afip.gov.ar/wsfev1/service.asmx. Los cambios del apartado
+                            4.2 impactaran en produccion a partir del dia lunes 11/05/2016. Alta de
+                            codigos, CAE ,10247, 10248, 10249, CAEA, 827,828, 829.</Msg>
+                    </Evt>
+                    <Evt>
+                        <Code>39</Code>
+                        <Msg>IMPORTANTE: El dia 6 de abril de 2025, se actualizo la version del Web
+                            Service (WS) que permite enviar, de forma opcional, el campo Condicion
+                            Frente al IVA del receptor. Cabe destacar que la Resolucion General Nro
+                            5616 indica que ese dato debe enviarse de manera obligatoria a partir
+                            del 15/04/2025. No obstante, se mantendra como un dato no excluyente
+                            hasta el 31/05/2026, inclusive. A partir del 01/06/2026 se rechazaran
+                            las solicitudes de emision de comprobantes sin este dato. Para mas
+                            informacion, consultar el manual en:
+                            https://www.arca.gob.ar/fe/ayuda/webservice.asp,
+                            https://www.arca.gob.ar/ws/documentacion/ws-factura-electronica.asp</Msg>
+                    </Evt>
+                </Events>
+            </FECAESolicitarResult>
+        </FECAESolicitarResponse>
+    </soap:Body>
+</soap:Envelope>

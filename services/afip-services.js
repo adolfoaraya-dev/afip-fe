@@ -310,7 +310,7 @@ class AfipServices {
 
 
         try {
-            let resultado = null;
+            let resultado = {};
             requestSoap = `<?xml version="1.0" encoding="utf-8"?>
                 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ar="http://ar.gov.afip.dif.FEV1/">
                 <soapenv:Header/>

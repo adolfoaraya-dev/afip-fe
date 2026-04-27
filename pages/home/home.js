@@ -176,8 +176,8 @@ class HomeController {
         if (!fechaVto.isAfter(fechaCbte))
             return this.mostrarAlert('La fecha de vencimiento debe ser mayor a la fecha de comprobante', true);
 
-        if (fechaVto.diff(fchServHasta, 'days') > 25)
-            return this.mostrarAlert('La fecha de vencimiento no puede superar los 20 días desde la fecha servicio hasta', true);
+        if (fechaVto.diff(fchServHasta, 'days') > 40)
+            return this.mostrarAlert('La fecha de vencimiento no puede superar los 40 días desde la fecha servicio hasta', true);
 
         Swal.fire({
             title: 'Consultando CUIT',
