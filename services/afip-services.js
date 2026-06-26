@@ -604,7 +604,7 @@ class AfipServices {
         }
     }
 
-    async consultarCUIT(params) {
+    async consultarCUIT__(params) {
         try {
 
             if (storage.get(params.cuit))
@@ -634,6 +634,8 @@ class AfipServices {
                 },
             });
 
+            console.log("consultarCUIT reponse:");
+            console.log(response.data);
             return {
                 success: true,
                 data: this.parseCUIT(response.data),
@@ -647,8 +649,32 @@ class AfipServices {
         }
     }
 
+    async consultarCUIT(params) {
+        try {
 
-    parseCUIT(html) {
+            if (storage.get(params.cuit))
+                return storage.get(params.cuit);
+
+            console.log(params);
+
+            const response = config.cuits.find(x => x.id === String(params.cuit))?.data || null;
+
+            console.log("consultarCUIT reponse:");
+            console.log(config);
+            return {
+                success: true,
+                data: response,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message,
+                details: error.response?.data,
+            };
+        }
+    }
+
+    parseCUIT_(html) {
         const $ = cheerio.load(html);
 
         const getText = (selector) => $(selector).text().trim() || "";

@@ -33,5 +33,53 @@
                 }
             ]
         }
-    }
+    },
+    "cuits": [
+        {
+            "id": "33999000709",
+            "data": {
+                "razonSocial": "MUNICIPALIDAD DE SAN ISIDRO",
+                "cuit": "33999000709",
+                "tipoPersona": "JURIDICA",
+                "estadoClave": "ACTIVO",
+                "condicionIVA": "EXENTO",
+                "domicilio": {
+                    "direccion": "AV. CENTENARIO 77 Piso:1 Dpto:CDOR.",
+                    "localidad": "SAN ISIDRO",
+                    "provincia": "BUENOS AIRES",
+                    "codigoPostal": "1642"
+                },
+                "actividadPrincipal": "GANANCIAS SOCIEDADES (EX)",
+                "impuestos": [
+                    "GANANCIAS SOCIEDADES (EX)",
+                    "RETENCIONES CONTRIB.SEG.SOCIAL (AC)",
+                    "EMPLEADOR-APORTES SEG. SOCIAL (AC)",
+                    "IVA EXENTO (AC)"
+                ],
+                "domicilioCompleto": "AV. CENTENARIO 77 Piso:1 Dpto:CDOR. SAN ISIDRO BUENOS AIRES"
+            }
+        },
+        {
+            "id": "30707617078",
+            "data": {
+                "razonSocial": "ITTL INFORMATION TECHNOLOGY TRANSPORT & LOGISTIC SA",
+                "cuit": "30707617078",
+                "tipoPersona": "JURIDICA",
+                "estadoClave": "ACTIVO",
+                "condicionIVA": "RESPONSABLE INSCRIPTO",
+                "domicilio": {
+                    "direccion": "CERRITO 348 Piso:1 Dpto:B",
+                    "localidad": "-",
+                    "provincia": "CIUDAD AUTONOMA BUENOS AIRES",
+                    "codigoPostal": "1010"
+                },
+                "actividadPrincipal": "SERVICIOS DE CONSULTORES EN INFORMÁTICA Y SUMINISTROS DE PROGRAMAS DE INFORMÁTICA",
+                "impuestos": [
+                    "SERVICIOS DE CONSULTORES EN INFORMÁTICA Y SUMINISTROS DE PROGRAMAS DE INFORMÁTICA",
+                    "HOSPEDAJE DE DATOS"
+                ],
+                "domicilioCompleto": "CERRITO 348 Piso:1 Dpto:B - CIUDAD AUTONOMA BUENOS AIRES"
+            }
+        }
+    ]
 }
